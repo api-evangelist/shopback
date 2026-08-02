@@ -1,0 +1,99 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  https://docs.shopback.com/docs/shopback-price-tagline +
+  https://docs.shopback.com/docs/enable-shopback-price-tagline +
+  https://docs.shopback.com/docs/install-shopback-price-tagline-manually +
+  https://docs.shopback.com/docs/checkout-redirect-flow +
+  https://docs.shopback.com/docs/universal-line-item-tracking +
+  https://docs.shopback.com/docs/platform-integration-guides
+summary: >-
+  ShopBack ships client-side and hosted surfaces rather than a component library:
+  a merchandising script (ShopBack Price Tagline), a ShopBack-hosted checkout the
+  merchant redirects into, an in-app consent page for account linking, a QR
+  rendering payload for point of sale, and JavaScript tracking snippets. There is
+  no published web-component or element library and no npm-distributed UI kit.
+
+families:
+- family: Merchandising
+  components:
+  - name: ShopBack Price Tagline
+    kind: client-side script / on-page price messaging
+    description: >-
+      Displays ShopBack Pay instalment messaging next to a product price on the
+      merchant's storefront.
+    installation:
+    - Automatic via the ShopBack Growth Tools app (Shopify)
+    - Manual script installation for other platforms
+    docs:
+    - https://docs.shopback.com/docs/shopback-pay-price-tagline
+    - https://docs.shopback.com/docs/enable-shopback-price-tagline
+    - https://docs.shopback.com/docs/install-shopback-price-tagline-manually
+    - https://docs.shopback.com/docs/what-is-the-requirement-for-the-visual-assets
+    official: true
+
+- family: Hosted checkout
+  components:
+  - name: ShopBack Pay checkout (redirect)
+    kind: ShopBack-hosted payment page
+    description: >-
+      After order/initiate the merchant redirects the consumer to the ShopBack
+      checkout using the returned orderContextToken; ShopBack returns the
+      consumer to returnToShopUrl or closeUrl.
+    endpoints:
+      sandbox: https://demo-checkout.shopback.com/paylater
+      production_sg: https://checkout.shopback.sg/paylater
+      production_my: https://checkout.shopback.my/paylater
+    docs: https://docs.shopback.com/docs/checkout-redirect-flow
+    official: true
+  - name: Tokenized-payment consent page
+    kind: ShopBack-hosted in-app browser page
+    description: >-
+      Opened at the redirectUrl returned by the link-session endpoint, with the
+      short-lived appToken passed as the X-ShopBack-App-Token header. ShopBack
+      requires SFSafariViewController or Chrome Custom Tabs — a plain WebView is
+      explicitly unsupported because the page needs cookies and secure storage.
+    endpoint: https://pay.shopback.com/link
+    docs: https://docs.shopback.com/reference/account-linking-1
+    official: true
+
+- family: Point of sale
+  components:
+  - name: Dynamic QR payload
+    kind: rendered QR code returned by the API
+    description: >-
+      POST /v1/instore/order/create returns qrCode in the requested qrType (for
+      example base64) for the merchant to render on a kiosk, cashier display,
+      terminal, app or website.
+    docs: https://docs.shopback.com/reference/create-dynamic-qr-order
+    official: true
+
+- family: Tracking snippets
+  components:
+  - name: Universal line-item tracking script
+    kind: JavaScript snippet
+    description: >-
+      Client-side tracking of order line items for cashback attribution.
+    docs: https://docs.shopback.com/docs/universal-line-item-tracking
+    official: true
+  - name: Shopify order tracking via Customer Events
+    kind: Shopify Customer Events (Web Pixel) snippet
+    description: >-
+      Replacement for the deprecated Shopify Additional Scripts method of
+      implementing ShopBack order tracking.
+    docs: https://docs.shopback.com/docs/shopify-order-tracking-customer-events-set-up
+    official: true
+
+platform_apps:
+  note: >-
+    Storefront plugins and apps that embed the surfaces above are catalogued in
+    packages/shopback-packages.yml (Shopify, WooCommerce, Magento 2.x,
+    PrestaShop, EasyStore, Salesforce Commerce Cloud).
+  index: https://docs.shopback.com/docs/platform-integration-guides
+
+gaps:
+- No versioned loader library, CDN URL or npm package is published for the Price
+  Tagline or tracking scripts — installation is via platform app or a manual
+  snippet supplied during onboarding.
+- No embeddable dashboard or reporting widget; merchant reporting is delivered as
+  downloadable activity/billing reports.

@@ -1,0 +1,132 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  https://docs.shopback.com/docs/pos-api-troubleshooting-list, enriched with the
+  4xx responses in openapi/shopback-in-store-payments-openapi.yml
+api: ShopBack In-Store Payments API (v1.4)
+format: proprietary
+rfc9457: false
+media_type: application/json
+envelope:
+  note: >-
+    In-store errors are returned as an HTTP status plus a human-readable message
+    string. ShopBack publishes no stable machine-readable error slug for this
+    surface — the message text below is the published identifier.
+status_codes:
+- status: 400
+  meaning: API request could not be processed — validation errors or invalid input.
+- status: 401
+  meaning: Invalid signature; failed to match HMAC signatures.
+- status: 404
+  meaning: Target resource(s) not found.
+- status: 409
+  meaning: Conflict — referenceId already assigned, or order not in the required state.
+
+errors:
+- class: authorization
+  message: Terminal Access Denied. Insufficient permissions to act on this terminal.
+  status: 401
+  cause: Wrong Terminal ID.
+  remediation: Confirm the Terminal ID matches the one ShopBack issued (check for
+    typos or trailing whitespace); otherwise contact ShopBack.
+- class: authorization
+  message: Missing Authorization Header. Field is required in all requests.
+  status: 401
+  cause: The Authorization header was not included.
+  remediation: 'Send Authorization: SB1-HMAC-SHA256 {accessKeyId}:{hmac} alongside
+    the Date and Content-Type headers.'
+- class: authorization
+  message: Invalid Auth Header. Unable to recognize Auth Code.
+  status: 401
+  cause: The SB1-HMAC-SHA256 prefix is missing from the Authorization header.
+  remediation: Prefix the header value with SB1-HMAC-SHA256.
+- class: authorization
+  message: Hmac signature has expired, please generate a new signature.
+  status: 401
+  cause: The timestamp is not UTC (e.g. ends in +08:00), or server clock skew of
+    roughly a minute or more.
+  remediation: Send the Date header in UTC ISO-8601 (YYYY-MM-DDTHH:mm:ss.000Z) and
+    keep the server clock in sync.
+- class: authorization
+  message: Invalid accessKeyId provided.
+  status: 401
+  cause: Credentials do not belong to the environment being called (sandbox vs
+    production).
+  remediation: Confirm the accessKeyId matches the environment and has no typos or
+    stray whitespace.
+- class: authorization
+  message: Invalid signature. Failed to match HMAC signatures.
+  status: 401
+  causes:
+  - Credentials belong to the wrong environment
+  - Body keys were not sorted alphabetically before stringify
+  - The JSON body was stringified incorrectly, or stringified twice
+  - The wrong Content-Type header was used
+  - The HMAC digest was base64-encoded instead of hex
+  remediation: Alphabetically sort the body keys, stringify once with no newlines,
+    set Content-Type to application/json, and emit the HMAC as a hex string.
+- class: not-found
+  message: Invalid posId. Unable to find matching posId.
+  status: 404
+  cause: The posId does not exist or is not fully set up.
+  remediation: Confirm the posId issued by ShopBack.
+- class: not-found
+  message: Invalid referenceId. Unable to find an existing payment record with the
+    referenceId provided.
+  status: 404
+  cause: The referenceId does not exist.
+  remediation: Confirm the referenceId exists.
+- class: bad-request
+  message: Invalid Date Header. Date Header has to be ISO-8601 format.
+  status: 400
+  cause: The timestamp does not conform to YYYY-MM-DDTHH:mm:ss.000Z.
+  remediation: Format the Date header as ISO-8601 UTC.
+- class: bad-request
+  message: Missing required parameters.
+  status: 400
+  remediation: Send every required field for the operation.
+- class: bad-request
+  message: Invalid country to currency pair. Currency is not supported in specified
+    country.
+  status: 400
+  remediation: Send a currency supported in the specified ISO-3166-1 alpha country.
+- class: bad-request
+  message: Amount is lower than minimum amount.
+  status: 400
+  remediation: Send an amount at or above the minimum, expressed in the smallest
+    denomination of the currency.
+- class: bad-request
+  message: Amount has exceeded maximum amount.
+  status: 400
+  remediation: Send an amount at or below the maximum for the merchant.
+- class: conflict
+  message: Order is not in captured state.
+  status: 409
+  cause: A refund or cancel was attempted against an order that is pending or
+    abandoned.
+  remediation: Only refund or cancel orders in the captured state.
+  source_operations:
+  - Order refund
+  - Cancel order
+- class: conflict
+  message: Invalid ReferenceId. ReferenceId provided is already assigned to an
+    existing resource.
+  status: 409
+  cause: The referenceId was already used for another transaction.
+  remediation: Use a fresh referenceId.
+  source_operations:
+  - Create dynamic QR order
+  - Scan consumer QR
+
+webhook_failure_codes:
+  source: https://docs.shopback.com/docs/server-to-server-payment-notification-payment-notification-webhook
+  note: >-
+    The payment-notification webhook carries a failure_code when order_status is
+    ERROR. ShopBack documents these two example values; the full internal code
+    list is not published.
+  codes:
+  - code: ORDER_NOT_SUBMITTED
+    meaning: Order not submitted — failed to charge the customer.
+  - code: HOOLAHJS_CLOSED
+    meaning: Order timed out — the user took no action, did not complete the
+      transaction, or closed the app.

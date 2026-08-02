@@ -1,0 +1,80 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the ShopBack In-Store Payments API
+  version: 1.0.0
+extends: openapi/shopback-in-store-payments-openapi.yml
+x-generated: '2026-08-02'
+x-method: generated
+x-source: >-
+  API Evangelist enrichment pass over ShopBack's published OpenAPI fragments and
+  the docs at docs.shopback.com. This overlay records our additions only; the
+  harvested specification is never mutated.
+actions:
+- target: $.info
+  update:
+    description: >-
+      The ShopBack In-Store Payments API accepts ShopBack Pay at the point of
+      sale and in customer-facing apps and websites, across three flows:
+      merchant-presented dynamic QR, customer-presented QR scanning, and URL
+      redirect. It covers order create, scan, status, refund and cancel, plus a
+      payment-notification webhook the payment partner implements.
+    contact:
+      name: ShopBack Integration Support
+      email: fs.integration@shopback.com
+      url: https://docs.shopback.com/reference/integration-support
+    x-apievangelist-enriched: '2026-08-02'
+    x-apievangelist-provider: shopback
+- target: $
+  update:
+    externalDocs:
+      description: ShopBack In-Store Payments getting started
+      url: https://docs.shopback.com/reference/in-store-getting-started
+    x-apievangelist-environments:
+      sandbox: https://integrations-sandbox.shopback.com/posi-sandbox
+      production_sg: https://integrations.shopback.sg/posi
+      production_hk: https://integrations.shopback.com.hk/posi
+      note: >-
+        The published definition declares only the sandbox server and embeds the
+        /posi-sandbox prefix in every path. In production the same paths sit
+        behind the /posi prefix on the country host. Recorded here rather than
+        injected into the harvested servers[] array.
+    x-apievangelist-authentication:
+      scheme: SB1-HMAC-SHA256
+      header: 'Authorization: SB1-HMAC-SHA256 <accessKeyId>:<hmacSignature>'
+      signed_string: method \n content-type \n ISO-8601 UTC date \n fully qualified
+        path with query \n sha256(alphabetically sorted, stringified JSON body)
+      additional_headers: [Date, Content-Type]
+      docs: https://docs.shopback.com/reference/generating-hmac-signature
+      note: >-
+        The harvested definition models the Authorization and Date headers as
+        plain required header parameters rather than a components.securitySchemes
+        entry, so no security scheme is declared in the original spec.
+      artifact: authentication/shopback-authentication.yml
+    x-apievangelist-idempotency:
+      header: X-ShopBack-Idempotent-Id
+      format: uuid-v4
+      documented_for:
+      - Create dynamic QR order
+      docs: https://docs.shopback.com/docs/what-is-x-shopback-idempotent-id
+      artifact: conventions/shopback-conventions.yml
+    x-apievangelist-errors:
+      envelope: '{statusCode, message, traceId}'
+      rfc9457: false
+      artifact: errors/shopback-error-codes.yml
+    x-apievangelist-webhooks:
+      artifact: asyncapi/shopback-payment-notification-webhooks.yml
+      note: >-
+        The path /<webhookUrl> in the harvested definition is implemented by the
+        payment partner, not by ShopBack.
+    x-apievangelist-artifacts:
+      conventions: conventions/shopback-conventions.yml
+      data_model: data-model/shopback-data-model.yml
+      lifecycle: lifecycle/shopback-lifecycle.yml
+      sandbox: sandbox/shopback-sandbox.yml
+      skills: skills/_index.yml
+- target: $.tags
+  update:
+  - name: Orders
+    description: Create, scan, retrieve, refund and cancel in-store orders.
+  - name: Notification
+    description: The payment-notification webhook implemented by the payment partner.

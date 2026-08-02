@@ -1,0 +1,94 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  https://docs.shopback.com/docs/api-urls +
+  https://docs.shopback.com/reference/in-store-getting-started +
+  https://docs.shopback.com/docs/integration-verification +
+  https://docs.shopback.com/docs/online-payment-credentials +
+  https://docs.shopback.com/docs/how-to-test-your-checkout-with-shopback-pay +
+  https://docs.shopback.com/docs/postman-payload-sample
+summary: >-
+  ShopBack runs a real sandbox with separate hosts and separate credentials for
+  both published APIs, plus a merchant-run certification process before go-live.
+  It publishes no magic test card numbers, test accounts or simulated decline
+  values — sandbox testing is done with ShopBack-issued sandbox credentials
+  against a documented test-scenario spreadsheet.
+
+environments:
+- api: ShopBack Online Payments API
+  sandbox: https://integrations-sandbox.shopback.com/demo/merchant
+  production: https://prod-merchant-service.hoolah.co/merchant
+  checkout_sandbox: https://demo-checkout.shopback.com/paylater
+  checkout_production:
+  - https://checkout.shopback.sg/paylater
+  - https://checkout.shopback.my/paylater
+  docs: https://docs.shopback.com/docs/api-urls
+- api: ShopBack In-Store Payments API
+  sandbox: https://integrations-sandbox.shopback.com/posi-sandbox
+  production_sg: https://integrations.shopback.sg/posi
+  production_hk: https://integrations.shopback.com.hk/posi
+  docs: https://docs.shopback.com/reference/in-store-getting-started
+
+credential_separation:
+  online_payments:
+    issued_by: ShopBack for Business merchant portal (Settings → Generate credential)
+    portals:
+      singapore: https://business.shopback.sg/signin
+      malaysia: https://business.shopback.my/signin
+    fields:
+    - Username = Merchant ID
+    - Live Password = Production Merchant Secret
+    - Sandbox Password = Sandbox Merchant Secret
+    note: The Merchant Secret can only be viewed once at generation time.
+    docs: https://docs.shopback.com/docs/online-payment-credentials
+  in_store_payments:
+    fields:
+    - accessKeyId
+    - accessKeySecret
+    - posId (one per terminal, kiosk, cashier register, app or website instance)
+    note: >-
+      Sandbox and production accessKeyId/accessKeySecret differ; production keys
+      are issued at go-live.
+    docs: https://docs.shopback.com/reference/in-store-getting-started
+
+test_values:
+  published: false
+  note: >-
+    No test card numbers, test bank accounts, magic identifiers, hosted test
+    tokens or simulated decline values are published. The HMAC example on the
+    signing page uses an illustrative accessKeySecret and payload only.
+
+test_clock_or_time_simulation:
+  supported: false
+
+fixture_tooling:
+- name: ShopBack Test Online API — Sandbox Test Scenario
+  kind: test-scenario spreadsheet
+  format: Google Sheets
+  covers: Create Order, Get Order, Checkout Flow, Refund and edge-case flows
+  usage: >-
+    Merchants execute every scenario in sandbox and record UUID/reference id,
+    response log and screenshots before requesting production access.
+  docs: https://docs.shopback.com/docs/integration-verification
+- name: V2.0 ShopBack POS API - Sandbox
+  kind: Postman collection
+  format: Postman collection JSON (vendor-hosted download)
+  usage: >-
+    Import, then set the accessKeyId, accessKeySecret, posId, country and
+    currency collection variables; the collection carries a pre-request script
+    that builds the SB1-HMAC-SHA256 signature.
+  docs: https://docs.shopback.com/docs/postman-payload-sample
+
+checkout_smoke_test:
+  description: >-
+    For plugin-based integrations ShopBack publishes a manual checkout smoke
+    test — add a product, reach the payment-method step, select "ShopBack: Get
+    Cashback with every payment" and confirm the ShopBack Pay payment page
+    renders.
+  docs: https://docs.shopback.com/docs/how-to-test-your-checkout-with-shopback-pay
+
+go_live_limits:
+  minimum_amount: 1
+  maximum_amount: 1000
+  currencies: [SGD, MYR]
+  source: https://docs.shopback.com/docs/integration-verification

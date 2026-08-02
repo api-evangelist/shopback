@@ -1,0 +1,86 @@
+generated: '2026-08-02'
+method: searched
+source: https://docs.shopback.com/docs/plugin-management + registry searches
+summary: >-
+  ShopBack publishes no first-party client SDK in any public package registry.
+  npm, PyPI, Packagist, RubyGems, Maven Central, NuGet and pkg.go.dev were all
+  searched — the only "shopback" hits on npm are third-party candidate exercises
+  from ShopBack's Node.js SEO coding challenge, not ShopBack-published libraries.
+  What ShopBack does ship is a set of first-party e-commerce PLATFORM PLUGINS for
+  ShopBack Pay, distributed as downloadable archives from the developer hub rather
+  than through a package registry, plus a Shopify app.
+registries_searched:
+- registry: npm
+  query: shopback
+  first_party_hits: 0
+  note: all matches are third-party coding-challenge submissions
+- registry: pypi
+  query: shopback
+  first_party_hits: 0
+  http_status: 404
+- registry: packagist
+  query: shopback
+  first_party_hits: 0
+- registry: rubygems
+  query: shopback
+  first_party_hits: 0
+  http_status: 404
+- registry: maven-central
+  query: shopback
+  first_party_hits: 0
+- registry: nuget
+  query: shopback
+  first_party_hits: 0
+- registry: pkg.go.dev
+  query: shopback
+  first_party_hits: 0
+packages: []
+plugins:
+- platform: Magento 2.x
+  name: ShopBack Pay for Magento
+  version: '3.0'
+  distribution: vendor-hosted archive (Google Drive)
+  docs: https://docs.shopback.com/docs/magento2x
+  index: https://docs.shopback.com/docs/plugin-management
+  official: true
+- platform: WooCommerce
+  name: ShopBack Pay for WooCommerce
+  version: '3.0'
+  distribution: vendor-hosted archive (Google Drive)
+  docs: https://docs.shopback.com/docs/woocommerce
+  index: https://docs.shopback.com/docs/plugin-management
+  official: true
+- platform: PrestaShop
+  name: ShopBack Pay for PrestaShop
+  version: '3.0'
+  distribution: vendor-hosted archive (Google Drive)
+  docs: https://docs.shopback.com/docs/prestashop
+  index: https://docs.shopback.com/docs/plugin-management
+  official: true
+- platform: Salesforce Commerce Cloud
+  name: ShopBack Pay for SFCC
+  distribution: vendor-hosted archive (Google Drive)
+  docs: https://docs.shopback.com/docs/salesforce-commerce-cloud
+  index: https://docs.shopback.com/docs/plugin-management
+  official: true
+- platform: Shopify
+  name: ShopBack payment gateway + ShopBack Growth Tools app
+  distribution: Shopify App Store
+  docs: https://docs.shopback.com/docs/shopify
+  official: true
+- platform: EasyStore
+  name: ShopBack Pay for EasyStore
+  distribution: EasyStore app
+  docs: https://docs.shopback.com/docs/easystore
+  official: true
+source_code:
+  github_org: https://github.com/shopback
+  note: >-
+    The ShopBack GitHub organisation exists (22 public repositories, created
+    2014) but contains only forks of third-party projects (presto, elastalert,
+    SwiftLint, create-react-app, stripe-ios and similar). No first-party SDK,
+    CLI or API client is published there.
+notes:
+- No `SDKs` pointer was wired in apis.yml because ShopBack ships no client
+  library — wiring one would misrepresent the developer surface. Integration is
+  either a direct REST call (HMAC or merchant JWT) or a platform plugin.

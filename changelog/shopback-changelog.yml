@@ -1,0 +1,98 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  https://docs.shopback.com/reference/in-store-getting-started (API contract
+  change log) + https://docs.shopback.com/docs/plugin-management +
+  updatedAt timestamps published on each docs page
+summary: >-
+  ShopBack does not run a single dated developer changelog. Two partial change
+  surfaces exist: a document-version change log embedded in the In-Store Payments
+  API getting-started page, and a plugin-version table for the e-commerce payment
+  plugins. Every docs page also carries an updatedAt timestamp, which is the only
+  signal of change on the Online Payments API.
+scheme: document version (In-Store), unversioned document + page updatedAt (Online)
+
+entries:
+- api: ShopBack In-Store Payments API
+  version: '1.6'
+  date: '2025-06-13'
+  breaking: false
+  additions:
+  - Added the POSI Hong Kong API environment (https://integrations.shopback.com.hk/posi).
+- api: ShopBack In-Store Payments API
+  version: '1.5'
+  date: '2023-09-07'
+  breaking: false
+  additions:
+  - Added the POSI Australia API environment.
+- api: ShopBack In-Store Payments API
+  version: '1.4'
+  date: '2023-01-01'
+  breaking: false
+  additions:
+  - Added consumer-presented QR code endpoints (POST /v1/instore/order/scan).
+- api: ShopBack In-Store Payments API
+  version: '1.3'
+  date: '2022-09-01'
+  breaking: false
+  changes:
+  - Surfaced HTTP 409 codes.
+  - Documented partnerId as not being a query parameter.
+- api: ShopBack In-Store Payments API
+  version: '1.2'
+  date: '2022-08-22'
+  breaking: false
+  changes:
+  - Clarified referenceId semantics.
+  - Switched country codes to ISO-3166-1 alpha.
+- api: ShopBack In-Store Payments API
+  version: '1.1'
+  date: '2022-08-11'
+  breaking: false
+  additions:
+  - Support for both ShopBack Pay and ShopBack PayLater.
+
+recent_documentation_changes:
+  note: >-
+    Captured from the updatedAt frontmatter ShopBack publishes on each docs page.
+    These record documentation change, not necessarily API change.
+  items:
+  - page: https://docs.shopback.com/reference/create-dynamic-qr-order
+    updated: '2026-07-20'
+  - page: https://docs.shopback.com/docs/quickstart-api
+    updated: '2026-07-20'
+  - page: https://docs.shopback.com/reference/in-store-getting-started
+    updated: '2026-07-20'
+  - page: https://docs.shopback.com/docs/pos-api-troubleshooting-list
+    updated: '2026-07-07'
+  - page: https://docs.shopback.com/reference/key-concepts
+    updated: '2026-06-24'
+  - page: https://docs.shopback.com/reference/account-linking-1
+    updated: '2026-06-24'
+  - page: https://docs.shopback.com/reference/tokenized-payments
+    updated: '2026-06-22'
+  - page: https://docs.shopback.com/reference/create-pre-auth
+    updated: '2026-06-22'
+  - page: https://docs.shopback.com/reference/initiateorder
+    updated: '2026-06-22'
+  - page: https://docs.shopback.com/docs/integration-verification
+    updated: '2025-11-20'
+
+plugin_versions:
+  source: https://docs.shopback.com/docs/plugin-management
+  updated: '2025-06-05'
+  plugins:
+  - platform: Magento
+    version: '3.0'
+  - platform: WooCommerce
+    version: '3.0'
+  - platform: PrestaShop
+    version: '3.0'
+  - platform: Salesforce Commerce Cloud
+    version: published (unversioned archive)
+
+gaps:
+- No dated, RSS/Atom-published changelog or release-notes feed for either API.
+- The Online Payments API (v2.0) has no published version history; the
+  tokenized-payments surface appears in the docs from June 2026 with no changelog
+  entry marking its introduction.

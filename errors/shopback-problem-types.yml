@@ -1,0 +1,154 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  derived from openapi/shopback-online-payments-openapi.yml 4xx/5xx responses,
+  enriched from https://docs.shopback.com/reference/key-concepts and
+  https://docs.shopback.com/docs/online-bespoke-error-code-list
+api: ShopBack Online Payments API (v2.0 / Online Bespoke API)
+format: proprietary
+rfc9457: false
+media_type: application/json
+envelope:
+  statusCode: HTTP status code, repeated in the body
+  error: machine-readable error slug (tokenized-payments surface)
+  message: human-readable explanation
+example: |
+  {
+    "statusCode": 401,
+    "error": "payment-token.invalid",
+    "message": "Payment token not found or belongs to a different merchant"
+  }
+
+problems:
+- code: payment-token.invalid
+  status: 401
+  title: Payment token invalid
+  detail: Token not found, unlinked, or belongs to a different merchant.
+  action: Prompt the user to re-link their ShopBack account.
+  source_operations:
+  - create-pre-auth
+  - immediate-charge
+  - get-cashback-balance
+- code: bad-request
+  status: 400
+  title: Bad request
+  detail: Missing required field, invalid amount, or currency mismatch.
+  action: Correct the request before retrying.
+  source_operations:
+  - create-pre-auth
+  - immediate-charge
+  - get-cashback-balance
+  - get-pre-auth
+- code: link-session.not-found
+  status: 404
+  title: Link session not found
+  detail: linkToken not found or belongs to a different merchant.
+  action: Do not retry; start a new link session.
+  source_operations:
+  - get-link-session
+  - swap-payment-token
+- code: auth-code.expired
+  status: 400
+  title: Auth code expired
+  detail: The one-time auth code TTL (60 seconds) elapsed.
+  action: Start a new link session.
+  source_operations:
+  - swap-payment-token
+- code: auth-code.invalid
+  status: 400
+  title: Auth code invalid
+  detail: Code does not match the stored value, or has already been used.
+  action: Do not retry; start a new link session.
+  source_operations:
+  - swap-payment-token
+- code: pre-auth.not-found
+  status: 404
+  title: Pre-authorization not found
+  detail: Pre-auth id not found or belongs to a different merchant.
+  action: Verify the id.
+  source_operations:
+  - get-pre-auth
+  - capture-pre-auth
+  - void-pre-auth
+- code: pre-auth.already-captured
+  status: 409
+  title: Pre-authorization already captured
+  detail: A capture has already been initiated for this pre-auth.
+  action: Do not retry the capture.
+  source_operations:
+  - capture-pre-auth
+  - void-pre-auth
+- code: pre-auth.already-voided
+  status: 409
+  title: Pre-authorization already voided
+  detail: The pre-auth was voided and can no longer be captured.
+  action: Create a new pre-authorization if needed.
+  source_operations:
+  - capture-pre-auth
+  - void-pre-auth
+- code: pre-auth.declined
+  status: 409
+  title: Pre-authorization declined
+  detail: The payment service provider declined the authorization.
+  action: Inform the user and offer an alternative payment method.
+  source_operations:
+  - capture-pre-auth
+  - void-pre-auth
+- code: pre-auth.expired
+  status: 409
+  title: Pre-authorization expired
+  detail: The pre-auth TTL elapsed before capture.
+  action: Create a new pre-authorization.
+  source_operations:
+  - capture-pre-auth
+  - void-pre-auth
+- code: unauthorized
+  status: 401
+  title: Unauthorized
+  detail: Missing or invalid merchant JWT.
+  action: Re-authenticate with POST /auth/login.
+  source_operations:
+  - get-link-session
+  - initiate-link-session
+  - swap-payment-token
+  - unlink-payment-token
+  - get-pre-auth
+  - capture-pre-auth
+  - void-pre-auth
+
+legacy_bespoke_status_codes:
+  source: https://docs.shopback.com/docs/online-bespoke-error-code-list
+  note: >-
+    The legacy Online Bespoke order surface (/auth/login, /order/initiate,
+    /order/{uuid}, /order/{orderUuid}/refund) signals errors by HTTP status
+    without a stable machine-readable slug.
+  codes:
+  - status: 400
+    example: Unsupported currency, or invalid/missing parameters
+    remediation: Validate the request payload and parameter formats before sending.
+  - status: 401
+    example: Invalid or expired token
+    remediation: Re-authenticate and validate credentials.
+    source_operations: [login]
+  - status: 404
+    example: Order not found; merchant not found; currency not found
+    remediation: Confirm the endpoint, the order context token, and that the order exists.
+    source_operations: [initiateOrder, getOrderInfo, initiateOrderRefund]
+  - status: 409
+    example: Duplicate refund request
+    remediation: Use a proper idempotency key; do not resend the same request as new.
+  - status: 412
+    example: Provided token is invalid or expired; rejected; invalid order status
+    remediation: Confirm the API URL; for refunds check the refund amount and order status.
+    source_operations: [initiateOrder, getOrderInfo, initiateOrderRefund, login]
+  - status: 422
+    example: Could not process the entity as it has invalid data
+    remediation: Correct the request body.
+    source_operations: [login]
+  - status: 500
+    example: Generic server failure
+    remediation: Retry with exponential backoff.
+    source_operations: [initiateOrder, getOrderInfo, initiateOrderRefund, login]
+  - status: 502/503/504
+    example: Gateway timeout / service unavailable
+    remediation: Retry with exponential backoff.

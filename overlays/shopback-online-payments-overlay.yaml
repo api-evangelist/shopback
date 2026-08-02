@@ -1,0 +1,78 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the ShopBack Online Payments API
+  version: 1.0.0
+extends: openapi/shopback-online-payments-openapi.yml
+x-generated: '2026-08-02'
+x-method: generated
+x-source: >-
+  API Evangelist enrichment pass over ShopBack's published OpenAPI fragments and
+  the docs at docs.shopback.com. This overlay records our additions only; the
+  harvested specification is never mutated.
+actions:
+- target: $.info
+  update:
+    description: >-
+      The ShopBack Online Payments API (also documented as the Online Bespoke
+      API) lets merchants accept ShopBack Pay and ShopBack PayLater in any web or
+      app checkout. It covers merchant JWT login, order initiation, order status,
+      full and partial refunds, and a tokenized-payments surface for account
+      linking, payment-token management, cashback balance, pre-authorization
+      hold/capture/void and immediate charge.
+    contact:
+      name: ShopBack Integration Support
+      email: fs.integration@shopback.com
+      url: https://docs.shopback.com/reference/integration-support
+    x-apievangelist-enriched: '2026-08-02'
+    x-apievangelist-provider: shopback
+- target: $
+  update:
+    externalDocs:
+      description: ShopBack developer hub
+      url: https://docs.shopback.com/
+    x-apievangelist-environments:
+      sandbox: https://integrations-sandbox.shopback.com/demo/merchant
+      production: https://prod-merchant-service.hoolah.co/merchant
+      docs: https://docs.shopback.com/docs/api-urls
+      note: >-
+        The published definition declares only the staging server. The production
+        base URL is documented separately on the API URLs page and is recorded
+        here rather than injected into the harvested servers[] array.
+    x-apievangelist-idempotency:
+      header: X-ShopBack-Idempotent-Id
+      format: uuid-v4
+      scope: per logical operation attempt
+      required_on:
+      - create-pre-auth
+      - immediate-charge
+      also_documented_for:
+      - initiateOrder
+      docs: https://docs.shopback.com/reference/key-concepts
+      artifact: conventions/shopback-conventions.yml
+    x-apievangelist-errors:
+      envelope: '{statusCode, error, message}'
+      rfc9457: false
+      artifact: errors/shopback-problem-types.yml
+    x-apievangelist-webhooks:
+      artifact: asyncapi/shopback-payment-notification-webhooks.yml
+      note: >-
+        Order outcomes are delivered asynchronously to the merchant-supplied
+        callbackUrl; ShopBack publishes no AsyncAPI document.
+    x-apievangelist-artifacts:
+      authentication: authentication/shopback-authentication.yml
+      conventions: conventions/shopback-conventions.yml
+      data_model: data-model/shopback-data-model.yml
+      lifecycle: lifecycle/shopback-lifecycle.yml
+      sandbox: sandbox/shopback-sandbox.yml
+      skills: skills/_index.yml
+- target: $.tags
+  update:
+  - name: Orders
+    description: Create, retrieve and refund ShopBack Pay online orders.
+  - name: Authentication
+    description: Merchant login and JWT issuance.
+  - name: Account Linking
+    description: Link sessions, auth-code exchange and payment-token lifecycle.
+  - name: Pre-Auth
+    description: Pre-authorization hold, capture, void, immediate charge and
+      cashback balance.

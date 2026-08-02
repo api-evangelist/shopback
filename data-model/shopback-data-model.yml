@@ -1,0 +1,234 @@
+generated: '2026-08-02'
+method: derived
+source: >-
+  openapi/shopback-online-payments-openapi.yml +
+  openapi/shopback-in-store-payments-openapi.yml (schema $ref graph and
+  id-reference fields), cross-checked against
+  https://docs.shopback.com/reference/key-concepts and
+  https://docs.shopback.com/reference/account-linking-1
+summary: >-
+  Two loosely coupled domains sit behind one merchant identity. The Online
+  Payments domain models a merchant session, an order (with items and billing /
+  shipping addresses), refunds, and a tokenized-payments sub-domain of link
+  sessions, payment tokens and pre-authorizations. The In-Store domain models a
+  POS-scoped order keyed by a merchant-supplied referenceId and a posId, with
+  refunds, cancellations and a webhook notification. There is no cross-domain
+  reference in the published contracts.
+
+identifiers:
+- id: orderUuid
+  entity: Order
+  format: UUID v4
+  visibility: private to the merchant — used to verify webhook authenticity
+- id: orderContextToken
+  entity: Order
+  format: UUID v4
+  visibility: public — carried through the checkout redirect
+- id: merchantOrderId / merchantRef / referenceId
+  entity: Order
+  format: merchant-defined string
+  note: >-
+    The merchant's own identifier. Must be unique on the In-Store API — reuse
+    returns 409.
+- id: cartID
+  entity: Order
+  note: merchant cart identifier, distinct from merchantOrderID
+- id: paymentToken
+  entity: PaymentToken
+  format: opaque string (documented example prefix "pt_")
+  note: long-lived, scoped to one user and one merchant channel
+- id: linkToken
+  entity: LinkSession
+  format: UUID v4
+- id: appToken
+  entity: LinkSession
+  format: short-lived JWT, passed as X-ShopBack-App-Token
+- id: posId
+  entity: PointOfSale
+  note: one per terminal, kiosk, cashier register, app or website instance
+- id: shopbackOrderId
+  entity: InStoreOrder
+- id: traceId
+  entity: (all in-store responses)
+  note: per-request trace identifier
+
+entities:
+- name: Merchant
+  domain: online
+  schemas: [LoginRequest, LoginResponse, PartnerMerchantInfoRequest]
+  fields: [merchantId, merchantCategoryCode, merchantTradingName, merchantEntityId]
+  relationships:
+  - has_many: Order
+  - has_many: PaymentToken
+    via: merchant channel scoping
+- name: Session
+  domain: online
+  schemas: [LoginResponse]
+  fields: [token, expiresAt]
+  notes: Merchant JWT, 8 hour lifetime.
+  relationships:
+  - belongs_to: Merchant
+- name: Order
+  domain: online
+  schemas: [InitiateOnlineOrderRequest, InitiatedOrderResponse, MerchantOrderResponse]
+  fields: [totalAmount, originalAmount, voucherCode, discount, currency, consumerEmail,
+    consumerPhoneNumber, callbackUrl, closeUrl, returnToShopUrl, status, orderType,
+    paymentMethod, paymentType]
+  relationships:
+  - belongs_to: Merchant
+  - has_many: OrderItem
+    via: items
+  - has_one: BillingAddress
+    via: billingAddress
+  - has_one: ShippingAddress
+    via: shippingAddress
+  - has_many: Refund
+    via: POST /order/{orderUuid}/refund
+- name: OrderItem
+  domain: online
+  schemas: [OrderItemRequest, OrderItemImageRequest]
+  fields: [name, quantity, price, sku, ean, description, detailedDescription,
+    originalPrice, taxAmount, merchantItemId, warranty, discount]
+  relationships:
+  - belongs_to: Order
+  - has_many: OrderItemImage
+    via: images
+- name: BillingAddress
+  domain: online
+  schemas: [BillingAddressRequest]
+  relationships:
+  - belongs_to: Order
+- name: ShippingAddress
+  domain: online
+  schemas: [ShippingAddressRequest]
+  relationships:
+  - belongs_to: Order
+- name: Refund
+  domain: online
+  schemas: [PartialRefundRequestModel, PartialRefundItemRequestModel, RRVResponseModel,
+    RRVResponseDetailsModel]
+  fields: [description, refundedByEmail, webhookUrl, amount, items, status, requestId,
+    createdAt, type, code, message, transactionFeeAmount, merchantFeeAmount]
+  relationships:
+  - belongs_to: Order
+    via: orderUuid
+  - has_many: PartialRefundItem
+    via: items (by sku)
+- name: LinkSession
+  domain: online / tokenized payments
+  schemas: [InitiateLinkSessionRequest, InitiateLinkSessionResponse,
+    GetLinkSessionResponse, UserHintDto]
+  fields: [callbackUrl, state, merchantUserId, userHint, linkToken, redirectUrl,
+    appToken, expiresAt, status, authCode, authCodeExpiresAt]
+  lifecycle: PENDING → consent → authCode (60s TTL) → exchanged; session TTL 20 minutes
+  relationships:
+  - belongs_to: Merchant
+  - has_one: PaymentToken
+    via: POST /tokenized-payment/v1/link-sessions/token
+- name: PaymentToken
+  domain: online / tokenized payments
+  schemas: [SwapPaymentTokenRequest, SwapPaymentTokenResponse,
+    UnlinkPaymentTokenRequest, UnlinkPaymentTokenResponse, GetCashbackBalanceRequest,
+    GetCashbackBalanceResponse]
+  states: [LINKED, UNLINKED]
+  relationships:
+  - belongs_to: Merchant
+  - belongs_to: ConsumerUser
+    via: merchantUserId
+  - has_many: PreAuthorization
+  - has_one: CashbackBalance
+- name: CashbackBalance
+  domain: online / tokenized payments
+  schemas: [GetCashbackBalanceResponse]
+  fields: [cashbackBalance, currency]
+  relationships:
+  - belongs_to: PaymentToken
+- name: PreAuthorization
+  domain: online / tokenized payments
+  schemas: [CreatePreAuthRequestDto, PreAuthResponseDto, CapturePreAuthRequestDto,
+    CapturePreAuthResponseDto, VoidPreAuthRequest]
+  fields: [id, paymentToken, merchantUserId, amount, currency, merchantRef,
+    merchantMetadata, status, orderUuid, orderStatus, failureReason, useCashback,
+    callbackUrl, createdAt, updatedAt]
+  states: [AUTHORIZED, captured, voided, declined, expired]
+  relationships:
+  - belongs_to: PaymentToken
+    via: paymentToken
+  - has_one: Order
+    via: orderUuid (created on capture)
+- name: ImmediateCharge
+  domain: online / tokenized payments
+  schemas: [ImmediateChargeRequestDto, ImmediateChargeResponseDto]
+  fields: [paymentToken, merchantUserId, amount, currency, merchantRef, useCashback,
+    callbackUrl, uuid, orderUuid, status, orderType, failureReason]
+  relationships:
+  - belongs_to: PaymentToken
+  - has_one: Order
+    via: orderUuid
+- name: InStoreOrder
+  domain: in-store
+  schemas: [SandboxCreateOrderReqDto, CreateOrderResDto, SandboxScanOrderReqDto,
+    GetOrderDetailsResDto]
+  fields: [posId, country, amount, currency, referenceId, qrType, qrCode,
+    consumerQrPayload, shopbackOrderId, status, orderAmount, refundAmount,
+    failureReason, paymentType, traceId, webhookUrl]
+  relationships:
+  - belongs_to: PointOfSale
+    via: posId
+  - has_one: PartnerMerchantInfo
+    via: partner
+  - has_one: AdditionalOrderMetadata
+    via: orderMetadata
+  - has_many: InStoreRefund
+  - has_one: InStoreCancellation
+- name: PointOfSale
+  domain: in-store
+  fields: [posId]
+  note: >-
+    Not modelled as its own schema; posId is issued by ShopBack per payment
+    surface and referenced on every in-store request.
+  relationships:
+  - has_many: InStoreOrder
+- name: PartnerMerchantInfo
+  domain: both
+  schemas: [PartnerMerchantInfoRequest]
+  fields: [merchantId, merchantCategoryCode, merchantTradingName, merchantEntityId]
+  note: The one schema shape shared verbatim by both APIs.
+- name: InStoreRefund
+  domain: in-store
+  schemas: [SandboxRefundOrderReqDto, RefundOrderResDto, AdditionalrefundMetadata]
+  fields: [amount, reason, referenceId, posId, refundMetadata, shopbackOrderId, traceId]
+  relationships:
+  - belongs_to: InStoreOrder
+    via: referenceId
+- name: InStoreCancellation
+  domain: in-store
+  schemas: [SandboxCancelOrderReqDto, CancelOrderResDto]
+  fields: [reason, traceId, referenceId]
+  relationships:
+  - belongs_to: InStoreOrder
+    via: referenceId
+- name: NotificationWebhook
+  domain: in-store
+  schemas: [NotificationWebhookReqDto, NotificationWebhookResDto]
+  fields: [traceId, shopbackOrderId, status, createdAt, updatedAt, orderAmount,
+    refundAmount, failureReason, referenceId, currency, posId, paymentType]
+  relationships:
+  - belongs_to: InStoreOrder
+  catalog: asyncapi/shopback-payment-notification-webhooks.yml
+- name: Error
+  domain: both
+  schemas: [ErrorResponse, MgsExternalErrorResponseDto, BadReqDto, UnauthorizedDto,
+    NotFoundResDto, ResouceConflictDto]
+  catalogs:
+  - errors/shopback-problem-types.yml
+  - errors/shopback-error-codes.yml
+
+notes:
+- >-
+  The two APIs share no identifier space — an in-store referenceId and an online
+  orderUuid are not interchangeable, and no operation resolves one from the other.
+- ConsumerUser is not exposed as a first-class resource; it is only ever
+  addressed indirectly through merchantUserId plus a paymentToken.
+- The in-store error DTO name "ResouceConflictDto" is spelled that way in
+  ShopBack's published definition and is preserved verbatim.

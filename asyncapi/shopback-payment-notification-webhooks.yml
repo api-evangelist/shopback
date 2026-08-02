@@ -1,0 +1,115 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  https://docs.shopback.com/docs/server-to-server-payment-notification-payment-notification-webhook +
+  https://docs.shopback.com/reference/key-concepts +
+  https://docs.shopback.com/reference/notification-1
+spec_type: Webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  ShopBack publishes no AsyncAPI document, no event catalog and no streaming
+  surface. Its only asynchronous surface is a merchant-implemented HTTP callback,
+  captured here as a webhook catalog. Nothing was fabricated into AsyncAPI form.
+
+delivery:
+  style: merchant-implemented HTTP endpoint (ShopBack POSTs to it)
+  transport: HTTPS
+  method: POST
+  content_type: application/json
+  subscription: >-
+    The callback URL is supplied per order — as callbackUrl on the Online
+    Payments order/initiate and tokenized-payment charge/capture requests, and as
+    the webhookUrl configured during in-store partner onboarding.
+  expected_response: HTTP 200, returned as fast as possible; process asynchronously.
+  retry: >-
+    A non-200 response is retried for up to 30 minutes. ShopBack warns that a
+    30-minute confirmation delay materially degrades the consumer experience.
+  duplicate_delivery: >-
+    The same notification may be delivered more than once — handle it
+    idempotently.
+  source_of_truth: >-
+    ShopBack instructs merchants to treat the synchronous API response, not the
+    webhook, as the source of truth and never to block payment confirmation on
+    webhook delivery.
+
+security:
+  signature_header: none published
+  verification_guidance: >-
+    ShopBack recommends cross-referencing order_uuid — which is returned only to
+    the merchant on order initiation — against the merchant's own record, since
+    order_context_token is a public value used in the redirect.
+  source_ip_allowlist:
+  - 52.77.77.186
+  - 18.139.142.64
+  - 54.169.195.114
+  - 52.77.135.75
+  - 18.140.220.149
+  - 13.228.6.43
+  - 54.254.76.7
+  - 52.64.93.144
+  - 13.55.37.110
+
+events:
+- name: payment.notification
+  api: ShopBack Online Payments API
+  trigger: >-
+    Sent immediately after a payment is confirmed by ShopBack Pay, and after a
+    tokenized-payment capture or immediate charge completes PSP processing.
+  docs: https://docs.shopback.com/docs/server-to-server-payment-notification-payment-notification-webhook
+  payload:
+    order_status:
+      type: string
+      values: [SUCCESS, ERROR]
+      note: The tokenized-payments docs describe the same field as SUCCESS or FAILED.
+    order_uuid:
+      type: string
+      description: ShopBack order identifier, also returned by order/initiate and by
+        the capture/charge response. Private to the merchant — use it to verify
+        the callback.
+    order_context_token:
+      type: string
+      description: Token identifying the order during the ShopBack Pay checkout
+        flow. Public — used in the redirect.
+    cart_id:
+      type: string
+      description: Merchant cart identifier submitted on order/initiate. Always null
+        for tokenized payments.
+    webhook_url:
+      type: string
+      description: Echoes the callbackUrl supplied by the merchant. Only present
+        when order_status is SUCCESS.
+    failure_code:
+      type: string
+      description: Internal failure code. Only present when order_status is ERROR.
+      known_values:
+      - ORDER_NOT_SUBMITTED
+      - HOOLAHJS_CLOSED
+    payment_type:
+      type: string
+      values: [PAY, PAYLATER]
+      description: Consumer payment type; documented as not live yet, populated for
+        completed and refunded orders only.
+  example: |
+    {
+      "cart_id": "34b5ds36-b24d-ds34-ds31-ds45dd563124",
+      "order_context_token": "d88fd4aa-2556-11eb-adc1-0242ac120002",
+      "order_status": "SUCCESS",
+      "order_uuid": "a5fd004a-2555-11eb-adc1-0242ac120002"
+    }
+- name: instore.order.notification
+  api: ShopBack In-Store Payments API
+  trigger: >-
+    ShopBack POSTs the in-store order outcome to the webhookUrl the payment
+    partner supplied during onboarding. Modelled in the In-Store Payments API
+    OpenAPI as the merchant-implemented POST /<webhookUrl> operation
+    (operationId "Notification").
+  docs: https://docs.shopback.com/reference/notification-1
+  spec: openapi/shopback-in-store-payments-openapi.yml#/paths/~1%3CwebhookUrl%3E
+  implemented_by: the payment partner / merchant, not ShopBack
+
+gaps:
+- No AsyncAPI document, event registry or event-schema catalog is published.
+- No webhook signature (HMAC or JWS) is provided for callback authenticity; the
+  documented mitigation is a shared-secret-free order_uuid cross-check plus an
+  IP allowlist.
+- No webhook replay, event-log or delivery-status API is published.

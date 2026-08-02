@@ -1,0 +1,93 @@
+# ShopBack for Business Documentation
+
+> Documentation for ShopBack for Business
+
+## Guides
+- [Getting Started with ShopBack](https://docs.shopback.com/docs/getting-started.md)
+- [Line Item Tracking](https://docs.shopback.com/docs/universal-line-item-tracking.md)
+- [Shopify](https://docs.shopback.com/docs/shopify-tracking.md): Integration with Shopify is simple and easy
+- [Shopify Order Tracking - Customer Events](https://docs.shopback.com/docs/shopify-order-tracking-customer-events-set-up.md): Shopify has deprecated the Additional Scripts section. This is the updated method of implementing the Javascript code
+- [E-commerce Platforms: Payments Integration Guides](https://docs.shopback.com/docs/platform-integration-guides.md)
+- [Shopify](https://docs.shopback.com/docs/shopify.md): How can I add ShopBack Pay to my Shopify store?
+- [Online Payment](https://docs.shopback.com/docs/online-shopify.md): Please go through the following steps to setup ShopBack Pay on Shopify.
+- [Install ShopBack Growth Tools App](https://docs.shopback.com/docs/install-shopback-growth-tools-app.md): Please go through the following steps to enable ShopBack Pay Price Tagline instalment.
+- [WooCommerce](https://docs.shopback.com/docs/woocommerce.md): How can I add ShopBack Pay to my WooCommerce store?
+- [Online Payment](https://docs.shopback.com/docs/online-woocommerce.md): Please go through the following steps to setup ShopBack Pay on Woocommerce.
+- [Magento 2.x](https://docs.shopback.com/docs/magento2x.md): How can I add ShopBack Pay to my Magento store?
+- [Plugin Installation](https://docs.shopback.com/docs/plugin-setup-magento.md): Please go through the following steps to setup ShopBack Pay on Magento.
+- [PrestaShop](https://docs.shopback.com/docs/prestashop.md): How can I add ShopBack Pay to my PrestaShop store?
+- [Online Payment](https://docs.shopback.com/docs/online-prestashop.md): Please go through the following steps to setup ShopBack Pay on PrestaShop.
+- [EasyStore](https://docs.shopback.com/docs/easystore.md): How can I add ShopBack Pay to my EasyStore store?
+- [Online Payment](https://docs.shopback.com/docs/online-easystore.md): Please go through the following steps to setup ShopBack Pay on EasyStore.
+- [Salesforce Commerce Cloud](https://docs.shopback.com/docs/salesforce-commerce-cloud.md): How can I add ShopBack Pay to my Salesforce Commerce Cloud (SFCC) store?
+- [Online Payment](https://docs.shopback.com/docs/online-sfcc.md): How can I add ShopBack Pay to my Salesforce Commerce Cloud (SFCC) store?
+- [ShopBack Price Tagline](https://docs.shopback.com/docs/shopback-price-tagline.md)
+- [Enable ShopBack Price Tagline](https://docs.shopback.com/docs/enable-shopback-price-tagline.md)
+- [E-Commerce Payment Plugins](https://docs.shopback.com/docs/plugin-management.md): Find the latest updates for our payment plugins here. We regularly update the plugin to help your business stay ahead.
+- [API Quickstart](https://docs.shopback.com/docs/quickstart-api.md): What do I need to start building a direct API Integration?
+- [Online Bespoke Integration](https://docs.shopback.com/docs/bespoke.md): You can integrate ShopBack Pay Online to any website via our API
+- [Implementation](https://docs.shopback.com/docs/bespoke-implementation.md)
+- [Checkout Redirect Flow](https://docs.shopback.com/docs/checkout-redirect-flow.md)
+- [Server to server payment notification (payment notification webhook)](https://docs.shopback.com/docs/server-to-server-payment-notification-payment-notification-webhook.md)
+- [Integration Verification](https://docs.shopback.com/docs/integration-verification.md): Before moving to production, merchants must complete all sandbox test scenarios to verify that your integration with ShopBack APIs works as expected
+- [Error Code List](https://docs.shopback.com/docs/online-bespoke-error-code-list.md): This is a list of error codes that Online Bespoke API calls may return.
+- [Install ShopBack Price Tagline Manually](https://docs.shopback.com/docs/install-shopback-price-tagline-manually.md)
+- [In-Store Integrations](https://docs.shopback.com/docs/in-store-integrations.md)
+- [Implementation](https://docs.shopback.com/docs/implementation-pos.md)
+- [In-Store API Troubleshooting List](https://docs.shopback.com/docs/pos-api-troubleshooting-list.md): This page lists common in-store API errors along with their possible root causes to help you quickly identify and resolve integration issues. Use this as a reference during development or debugging to streamline troubleshooting and ensure a smooth integration process.
+- [Postman Payload Sample](https://docs.shopback.com/docs/postman-payload-sample.md): This page contains a Postman sample collection to assist with the integration of our POS API. It includes ready-to-use requests and example payloads to help partners quickly understand the API structure, required parameters, and expected responses.  Use this collection to test endpoints, simulate transactions, and streamline your development process. Make sure to replace any placeholder values (e.g., accessKeyId, accessKeySecret, posId) with your actual integration credentials.
+- [How does Billing for Payment Products work?](https://docs.shopback.com/docs/how-does-billing-for-payment-products-work.md)
+- [Enterprise and Payment Partner Billing Report](https://docs.shopback.com/docs/enterprise-and-payment-partner-reporting.md): Machine-processable reporting for companies that prefer automation to ingest and process transaction data
+- [Billing and Activity Reports](https://docs.shopback.com/docs/billing-and-activity-reports.md): Human readable reports intended for finance people and business owners to understand activity with ShopBack
+- [Activity Report: Structure](https://docs.shopback.com/docs/daily-activity-report.md)
+- [Activity Report: Summary](https://docs.shopback.com/docs/activity-report-summary.md)
+- [Activity Report: Payments](https://docs.shopback.com/docs/activity-report-payments.md)
+- [Activity Report: Vouchers](https://docs.shopback.com/docs/activity-report-vouchers.md)
+- [Activity Report: Loyalty Bonus](https://docs.shopback.com/docs/activity-report-loyalty-bonus.md)
+- [Activity Report: Other](https://docs.shopback.com/docs/activity-report-corporate-buy.md): 🔜   This feature is not yet available but coming soon...
+- [General Questions](https://docs.shopback.com/docs/general.md)
+- [Online Payment Credentials](https://docs.shopback.com/docs/online-payment-credentials.md): This flow will show you how to generate the integration credentials from Merchant Portal
+- [What is ShopBack Price Tagline?](https://docs.shopback.com/docs/shopback-pay-price-tagline.md)
+- [How to test your checkout with ShopBack Pay?](https://docs.shopback.com/docs/how-to-test-your-checkout-with-shopback-pay.md)
+- [What is the requirement for the visual assets?](https://docs.shopback.com/docs/what-is-the-requirement-for-the-visual-assets.md)
+- [How to deactivate ShopBack Pay online from your website/app](https://docs.shopback.com/docs/how-to-deactivate-shopback.md)
+- [How to get Shopify Order ID between Shopify Order Report and ShopBack Pay Merchant Activity Report](https://docs.shopback.com/docs/how-to-get-shopify-order-id-between-shopify-order-report-and-shopback-pay-merchant-activity-report.md)
+- [Unable to 'Activate' ShopBack app in Shopify](https://docs.shopback.com/docs/unable-to-activate-shopback-app-in-shopify.md): If you are having trouble activating our ShopBack Payment App, please follow the steps by steps below to activate the app in your Shopify account.
+- [Online Bespoke API](https://docs.shopback.com/docs/bespoke-1.md): Frequently asked questions regarding bespoke integrations.
+- [Token Validity](https://docs.shopback.com/docs/token-validity.md)
+- [Customer Information Fields for Order Creation](https://docs.shopback.com/docs/customer-information-fields-for-order-creation.md)
+- [Difference between merchantOrderID and cartID](https://docs.shopback.com/docs/difference-between-merchantorderid-and-cartid.md)
+- [Merchant Store ID](https://docs.shopback.com/docs/merchant-store-id.md)
+- [What is X-ShopBack-Idempotent Id?](https://docs.shopback.com/docs/what-is-x-shopback-idempotent-id.md): To help prevent duplicate requests and ensure smoother transactions between your system and our platform, we are introducing the X-ShopBack-Idempotent-Id parameter. This enhancement is designed to improve reliability by ensuring that each request is processed only once, even if it is sent multiple times due to network retries or other unexpected issues.
+
+## API Reference
+- [Getting Started - Tokenized-Payments](https://docs.shopback.com/reference/getting-started-tokenized-payments.md)
+- [Account Linking](https://docs.shopback.com/reference/account-linking-1.md)
+- [Pre-Auth Requests](https://docs.shopback.com/reference/pre-auth-requests.md)
+- [Immediate Charge](https://docs.shopback.com/reference/immediate-charge-1.md)
+- [Key Concepts](https://docs.shopback.com/reference/key-concepts.md)
+- [Login](https://docs.shopback.com/reference/login.md): There is a clean Login and Logout process associated with the Authentication process. Before you can  Login, you need to obtain credentials from ShopBack - provided after registering a set of valid merchant details.
+- [Create order](https://docs.shopback.com/reference/initiateorder.md): This is where you can initiate an order with ShopBack, by using the **initiateOrder** method. We also provide a number of methods to refund orders. For example if the consumer returns one (or all) item(s) of an order, you can initiate a full or partial refund. You would be asked to send us the SKU number of the items to be refunded.
+- [Get order status](https://docs.shopback.com/reference/getorderinfo.md)
+- [Order refund](https://docs.shopback.com/reference/initiateorderrefund.md)
+- [Tokenized-Payments](https://docs.shopback.com/reference/tokenized-payments.md)
+- [Initiate a tokenized payment link session](https://docs.shopback.com/reference/initiate-link-session.md): Creates a PENDING link session and returns a `redirectUrl` and `appToken`. The merchant opens `redirectUrl` in an in-app browser and passes `appToken` as `X-ShopBack-App-Token`.
+- [Get link session status](https://docs.shopback.com/reference/get-link-session.md): Returns the current state of a tokenized payment link session. Poll this endpoint after redirecting the user to determine when the consent flow is complete.
+- [Exchange an auth code for a payment token](https://docs.shopback.com/reference/swap-payment-token.md): Validates the one-time auth code issued after the user completes the ShopBack consent flow and returns a reusable payment token scoped to the merchant channel.
+- [Revoke a linked payment token](https://docs.shopback.com/reference/unlink-payment-token.md): Unlinks a payment token for the authenticated merchant channel. Returns 400 if an active pre-auth (AUTHORIZED) is still open for the account.
+- [Get cashback balance for a payment token](https://docs.shopback.com/reference/get-cashback-balance.md): Returns the user's available cashback balance for the merchant channel associated with the payment token.
+- [Create a pre-authorization](https://docs.shopback.com/reference/create-pre-auth.md): Places a hold on the funds associated with a payment token. Use capture to settle or void to release the hold.
+- [Capture a pre-authorization](https://docs.shopback.com/reference/capture-pre-auth.md): Executes the held funds for a pre-authorization and creates an order. The pre-auth must be in AUTHORIZED status.
+- [Get a pre-authorization by ID](https://docs.shopback.com/reference/get-pre-auth.md): Returns the current state of a pre-authorization. Use this to poll for status transitions after create, capture, or void operations.
+- [Immediate tokenized payment charge (auth + capture)](https://docs.shopback.com/reference/immediate-charge.md): Charges the user's linked payment method in a single step without a pre-authorization hold. Use this for one-shot payments where you do not need to adjust the amount before capture.
+- [Void a pre-authorization](https://docs.shopback.com/reference/void-pre-auth.md): Releases the held funds for a pre-authorization. The pre-auth must be in AUTHORIZED status. If the provider rejects the void, the pre-auth stays AUTHORIZED and the merchant may retry.
+- [Getting Started](https://docs.shopback.com/reference/in-store-getting-started.md)
+- [Authentication](https://docs.shopback.com/reference/getting-started-authentication.md)
+- [Generating an HMAC Signature](https://docs.shopback.com/reference/generating-hmac-signature.md)
+- [Acknowledge notification](https://docs.shopback.com/reference/notification-1.md): This API is implemented by the payment partner. ShopBack will send the following request parameters to the `webhookUrl` supplied by the payment partner during onboarding.
+- [Create order - QR / URL (dynamic)](https://docs.shopback.com/reference/create-dynamic-qr-order.md): Use this endpoint to create an order to accept payment using ShopBack’s dynamic QR code or to accept payments for an in-store context through a customer-facing app or website. This endpoint creates a payment order with the dynamic QR code or relevant URL for redirect.
+- [Scan consumer QR](https://docs.shopback.com/reference/scan-consumer-qr.md): Use this endpoint to create an order to initiate payment using ShopBack’s consumer-presented QR code.
+- [Get order status](https://docs.shopback.com/reference/get-order-status.md): Use this endpoint to check for the status and details of an order.
+- [Order refund](https://docs.shopback.com/reference/order-refund.md): Use this endpoint to refund captured orders with ShopBack.
+- [Cancel order](https://docs.shopback.com/reference/cancel-order.md): Use this endpoint to cancel a payment before processing. Cancellations are not allowed once a customer has swiped-to-pay on ShopBack’s mobile application.
+- [Integration Support](https://docs.shopback.com/reference/integration-support.md)

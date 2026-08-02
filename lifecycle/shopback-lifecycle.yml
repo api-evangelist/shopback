@@ -1,0 +1,74 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  https://docs.shopback.com/reference/in-store-getting-started +
+  https://docs.shopback.com/docs/api-urls +
+  https://docs.shopback.com/docs/integration-verification +
+  https://status.shopback.com/ + the harvested OpenAPI documents
+apis:
+- name: ShopBack Online Payments API
+  document_version: '2.0'
+  versioning:
+    style: mixed — document version plus partial URI-path versioning
+    current: >-
+      Tokenized-payment operations are versioned in the path
+      (/tokenized-payment/v1/...); the legacy bespoke order operations are not
+      (/auth/login, /order/initiate, /order/{uuid}, /order/{orderUuid}/refund).
+  environments:
+    sandbox: https://integrations-sandbox.shopback.com/demo/merchant
+    production: https://prod-merchant-service.hoolah.co/merchant
+    docs: https://docs.shopback.com/docs/api-urls
+- name: ShopBack In-Store Payments API
+  document_version: '1.4'
+  versioning:
+    style: uri-path behind an environment prefix
+    current: /v1/instore/...
+  environments:
+    sandbox: https://integrations-sandbox.shopback.com/posi-sandbox
+    production_sg: https://integrations.shopback.sg/posi
+    production_hk: https://integrations.shopback.com.hk/posi
+    docs: https://docs.shopback.com/reference/in-store-getting-started
+
+status_page:
+  url: https://status.shopback.com/
+  verified_status: 200
+  platform: UptimeRobot status page
+  uptime_target: not published
+
+deprecation:
+  policy_documented: false
+  policy_url: null
+  sunset_header: not documented
+  deprecation_header: not documented
+  deprecated_operations: []
+  note: >-
+    No RFC 8594 Sunset/Deprecation header support, deprecation window, or
+    end-of-life policy is published for either API. The In-Store API change log
+    records additive changes only, with no removals announced.
+
+sla:
+  documented: false
+  note: >-
+    No public uptime commitment or per-endpoint SLA is published. Commercial
+    terms are handled through merchant onboarding at business.shopback.com.
+
+go_live:
+  process: >-
+    Merchants must complete every sandbox test scenario before production access.
+    ShopBack publishes a sandbox test-scenario spreadsheet, then runs its own
+    production verification round after the merchant reports go-live.
+  contact: fs.integration@shopback.com
+  docs: https://docs.shopback.com/docs/integration-verification
+  payment_limits_at_go_live:
+    minimum: 1 SGD / MYR
+    maximum: 1000 SGD / MYR
+
+roadmap:
+  published: false
+
+changelog: changelog/shopback-changelog.yml
+
+notes:
+- The production host for the Online Payments API is prod-merchant-service.hoolah.co
+  — a legacy hostname from hoolah, the BNPL business ShopBack acquired. The
+  webhook failure code HOOLAHJS_CLOSED carries the same lineage.

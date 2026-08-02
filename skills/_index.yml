@@ -1,0 +1,40 @@
+generated: '2026-08-02'
+method: generated
+source: >-
+  Generated from ShopBack's published OpenAPI operations and developer docs. No
+  provider-published AGENTS.md or skill files were found on docs.shopback.com,
+  the corporate site or the ShopBack GitHub organisation.
+skills:
+- file: shopback-online-checkout.md
+  name: Take a ShopBack Pay online payment
+  api: openapi/shopback-online-payments-openapi.yml
+  operations: [login, initiateOrder, getOrderInfo]
+- file: shopback-online-refund.md
+  name: Refund a ShopBack Pay online order
+  api: openapi/shopback-online-payments-openapi.yml
+  operations: [login, getOrderInfo, initiateOrderRefund]
+- file: shopback-tokenized-payments.md
+  name: Link a ShopBack account and charge a returning user
+  api: openapi/shopback-online-payments-openapi.yml
+  operations:
+  - login
+  - initiate-link-session
+  - get-link-session
+  - swap-payment-token
+  - get-cashback-balance
+  - create-pre-auth
+  - get-pre-auth
+  - capture-pre-auth
+  - void-pre-auth
+  - immediate-charge
+  - unlink-payment-token
+- file: shopback-instore-qr-payment.md
+  name: Accept a ShopBack Pay in-store QR payment
+  api: openapi/shopback-in-store-payments-openapi.yml
+  operations:
+  - Create dynamic QR order
+  - Scan consumer QR
+  - Get order status
+  - Order refund
+  - Cancel order
+  - Notification

@@ -1,0 +1,184 @@
+generated: '2026-08-02'
+method: searched
+source: >-
+  https://docs.shopback.com/reference/key-concepts +
+  https://docs.shopback.com/docs/what-is-x-shopback-idempotent-id +
+  https://docs.shopback.com/reference/generating-hmac-signature +
+  https://docs.shopback.com/docs/quickstart-api +
+  derived from openapi/shopback-online-payments-openapi.yml and
+  openapi/shopback-in-store-payments-openapi.yml
+apis:
+- ShopBack Online Payments API (v2.0)
+- ShopBack In-Store Payments API (v1.4)
+
+transport:
+  protocol: HTTPS only
+  tls_minimum: TLS 1.2
+  content_type: application/json
+  style: REST, resource-oriented URLs
+  docs: https://docs.shopback.com/docs/quickstart-api
+
+authentication:
+  online_payments:
+    style: merchant JWT bearer token
+    obtained_via: POST /auth/login with the Merchant ID + Merchant Secret issued
+      in the ShopBack for Business merchant portal
+    header: 'Authorization: Bearer <merchant_jwt>'
+    token_lifetime: 8 hours
+    guidance: ShopBack recommends generating a new token per transaction.
+    docs: https://docs.shopback.com/docs/token-validity
+  in_store_payments:
+    style: HMAC request signing
+    algorithm: HMAC-SHA256, hex encoded
+    header: 'Authorization: SB1-HMAC-SHA256 <accessKeyId>:<hmacSignature>'
+    signed_string: >-
+      HTTP method \n content type \n ISO-8601 UTC date \n fully qualified
+      request path with query \n SHA-256 digest of the alphabetically key-sorted,
+      stringified JSON body — in that exact order
+    additional_required_headers:
+    - Date (ISO-8601, UTC, must match the value used in the signature)
+    - Content-Type (application/json)
+    docs: https://docs.shopback.com/reference/generating-hmac-signature
+  profile: authentication/shopback-authentication.yml
+
+idempotency:
+  supported: true
+  header: X-ShopBack-Idempotent-Id
+  format: UUID v4
+  scope: per logical operation attempt
+  semantics: >-
+    A retry carrying the same X-ShopBack-Idempotent-Id returns the original
+    result instead of creating a duplicate. Reuse the same key when re-sending an
+    unchanged request after a timeout, a 5xx or no response; generate a new key
+    for any new or changed operation (a new order, a new refund, a different
+    amount, or a deliberate retry after a decline).
+  operations_documented_as_requiring_it:
+  - POST /tokenized-payment/v1/pre-auths
+  - POST /tokenized-payment/v1/charge
+  also_documented_for:
+  - POST /order/initiate (Online Bespoke create order)
+  - POST /posi-sandbox/v1/instore/order/create (In-Store create dynamic QR order)
+  caution: >-
+    ShopBack warns that a key collision between two different intended operations
+    silently returns the first result — keys must be generated with a UUID
+    library, never constructed by hand.
+  docs:
+  - https://docs.shopback.com/docs/what-is-x-shopback-idempotent-id
+  - https://docs.shopback.com/reference/key-concepts
+
+pagination:
+  supported: false
+  note: >-
+    Neither published API exposes a collection/list endpoint — every operation
+    acts on a single order, pre-auth, token or link session — so no pagination
+    convention is defined.
+
+field_expansion:
+  supported: false
+
+metadata:
+  supported: partial
+  fields:
+  - merchantOrderID / referenceId — the merchant's own order identifier, echoed
+    back on status, refund and cancel
+  - cartID — merchant cart identifier carried through to the webhook payload
+  - merchantUserId — the merchant's opaque, stable user identifier used for
+    tokenized payments
+  docs: https://docs.shopback.com/docs/difference-between-merchantorderid-and-cartid
+
+request_tracing:
+  request_id_header: not documented
+  response_body_trace_id: >-
+    Every In-Store Payments API response and error body carries a `traceId`
+    field (CreateOrderResDto, CancelOrderResDto, RefundOrderResDto,
+    GetOrderDetailsResDto, NotificationWebhookReqDto, and the 400/401/404/409
+    error DTOs). The Online Payments API error envelope carries `errorId`.
+  correlation: >-
+    Correlation is otherwise by business identifier rather than a transport
+    request id: order_uuid / referenceId on the order APIs, order_context_token
+    on the checkout redirect, linkToken on a link session, and the pre-auth id.
+
+versioning:
+  style: mixed
+  online_payments: >-
+    Document version 2.0; the tokenized-payment surface is versioned in the URI
+    path (/tokenized-payment/v1/...), the legacy bespoke order surface is not
+    (/order/initiate).
+  in_store_payments: >-
+    Document version 1.4 (change log published through v1.6); URI path carries
+    /v1/instore/... behind an environment prefix (/posi in production,
+    /posi-sandbox in sandbox).
+  lifecycle: lifecycle/shopback-lifecycle.yml
+
+error_envelope:
+  format: proprietary JSON (not RFC 9457 application/problem+json)
+  tokenized_payments_shape:
+    statusCode: integer HTTP status
+    error: machine-readable error slug, e.g. payment-token.invalid
+    message: human-readable explanation
+  in_store_shape:
+    note: >-
+      In-store errors return an HTTP status with a human-readable message string
+      (for example "Invalid signature. Failed to match HMAC signatures."); no
+      stable machine-readable code is published for this surface.
+  catalogs:
+  - errors/shopback-problem-types.yml
+  - errors/shopback-error-codes.yml
+
+retry_policy:
+  documented: true
+  rules:
+  - scenario: network timeout or 5xx
+    retry: true
+    note: retry with the SAME X-ShopBack-Idempotent-Id
+  - scenario: 400 bad-request
+    retry: only after correcting the request
+  - scenario: 401 payment-token.invalid
+    retry: false
+    note: prompt the user to re-link their ShopBack account
+  - scenario: 409 conflict (already-captured, already-voided, declined, expired)
+    retry: false
+    note: these reflect terminal state transitions
+  - scenario: auth code exchange failure
+    retry: false
+    note: the auth code is single-use with a 60 second TTL; start a new link session
+  - scenario: 502 / 503 / 504
+    retry: true
+    note: exponential backoff
+  docs: https://docs.shopback.com/reference/key-concepts
+
+rate_limit_signaling:
+  documented: false
+  note: No rate-limit headers, quotas or throttling policy are published.
+
+webhooks:
+  catalog: asyncapi/shopback-payment-notification-webhooks.yml
+  delivery: >-
+    HTTPS POST to the merchant-supplied callbackUrl; the merchant must return
+    HTTP 200 quickly. Failures are retried for up to 30 minutes.
+  verification: >-
+    No signature header is published. ShopBack instead recommends cross-checking
+    the private order_uuid (known only to the merchant) against the order the
+    merchant initiated, since order_context_token is a public redirect value.
+  source_of_truth: >-
+    ShopBack instructs merchants to treat the synchronous API response as the
+    source of truth and never to block payment confirmation on webhook delivery.
+
+amounts_and_currency:
+  in_store: amount is expressed in the smallest denomination of the currency
+  country_currency_pairing: >-
+    The country and currency must be a supported pair; country codes follow
+    ISO-3166-1 alpha.
+  payment_limits_at_go_live:
+    minimum: 1 SGD / MYR
+    maximum: 1000 SGD / MYR
+    source: https://docs.shopback.com/docs/integration-verification
+
+cross_links:
+  authentication: authentication/shopback-authentication.yml
+  errors:
+  - errors/shopback-problem-types.yml
+  - errors/shopback-error-codes.yml
+  lifecycle: lifecycle/shopback-lifecycle.yml
+  sandbox: sandbox/shopback-sandbox.yml
+  data_model: data-model/shopback-data-model.yml

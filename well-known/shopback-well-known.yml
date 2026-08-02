@@ -1,0 +1,44 @@
+generated: '2026-08-02'
+method: probed
+source: live probes of every ShopBack website, docs and API host
+summary: >-
+  No /.well-known/ discovery documents are published on any ShopBack host. Every
+  probed path returned 404 across the corporate site, the developer hub, the
+  merchant portal, the sandbox host and both production API hosts. Absence is
+  valid recorded data — ShopBack publishes no security.txt, no OIDC/OAuth
+  discovery (its APIs use merchant JWT login and SB1-HMAC-SHA256 signatures,
+  not OAuth), no api-catalog and no ai-plugin manifest.
+paths_probed:
+- /.well-known/security.txt
+- /.well-known/openid-configuration
+- /.well-known/oauth-authorization-server
+- /.well-known/api-catalog
+- /.well-known/ai-plugin.json
+- /.well-known/agent-card.json
+- /.well-known/agent.json
+- /security.txt
+hosts:
+- host: www.shopback.com
+  result: all probed paths 404
+- host: shopback.com
+  result: all probed paths 404
+- host: www.shopback.sg
+  result: all probed paths 404
+- host: docs.shopback.com
+  result: all probed paths 404
+- host: business.shopback.com
+  result: all probed paths 404
+- host: integrations.shopback.sg
+  result: all probed paths 404
+- host: integrations-sandbox.shopback.com
+  result: all probed paths 404
+- host: prod-merchant-service.hoolah.co
+  result: all probed paths 404
+files: []
+notes:
+- The only machine-readable discovery surface ShopBack publishes is an llms.txt
+  index at https://docs.shopback.com/llms.txt (HTTP 200) — captured in
+  llms/shopback-llms.txt.
+- No A2A agent card was found at either the canonical /.well-known/agent-card.json
+  or the legacy /.well-known/agent.json path on any host, so no a2a/ artifact was
+  written.

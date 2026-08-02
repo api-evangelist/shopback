@@ -1,7 +1,21 @@
 aid: shopback
 name: ShopBack
-description: 'ShopBack is a company surfaced via the API Evangelist harvest backlog (source: secondary-market)
-  and added to the network as a stub for full-pipeline profiling.'
+description: >-
+  ShopBack is a Singapore-headquartered shopping, rewards and payments platform
+  founded in 2014, operating across 13 markets in Asia-Pacific, Europe and the
+  United States with more than 20 million members and 20,000 merchant partners.
+  Alongside its consumer cashback and discovery app, ShopBack runs a merchant-facing
+  payments business — ShopBack Pay and ShopBack PayLater — and publishes a public
+  developer hub at docs.shopback.com covering two REST APIs. The Online Payments
+  API (v2.0, also called the Online Bespoke API) handles merchant login, order
+  initiation, order status, refunds, and a tokenized-payments surface for account
+  linking, pre-authorization hold/capture/void, immediate charge and cashback-balance
+  lookup. The In-Store Payments API (v1.4) covers merchant-presented and
+  customer-presented QR ordering, order status, refunds, cancellations, and a
+  payment-notification webhook for point-of-sale and customer-facing app checkout.
+  Both are HMAC- or JWT-authenticated over HTTPS/TLS 1.2+, support an
+  X-ShopBack-Idempotent-Id idempotency header, and ship e-commerce plugins for
+  Shopify, WooCommerce, Magento, PrestaShop, EasyStore and Salesforce Commerce Cloud.
 url: https://raw.githubusercontent.com/api-evangelist/shopback/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:secondary-market
@@ -10,9 +24,83 @@ x-tier-reason: harvest
 specificationVersion: '0.20'
 created: '2026-08-02'
 modified: '2026-08-02'
+image: https://corporate.shopback.com/opengraph.jpg
 tags:
 - Company
-apis: []
+- Payments
+- Cashback
+- Rewards
+- Loyalty
+- E-Commerce
+- Buy Now Pay Later
+- Point Of Sale
+- Checkout
+- Singapore
+apis:
+- aid: shopback:shopback-online-payments-api
+  name: ShopBack Online Payments API
+  description: >-
+    The ShopBack Online Payments API (v2.0), also documented as the Online Bespoke
+    API, lets merchants add ShopBack Pay and ShopBack PayLater to any web or app
+    checkout. It covers merchant JWT login, order initiation, order status lookup
+    and full or partial refunds, plus a tokenized-payments surface — link sessions,
+    auth-code exchange for a reusable payment token, token revocation, cashback
+    balance, pre-authorization create/get/capture/void and immediate charge.
+  humanURL: https://docs.shopback.com/reference/initiateorder
+  baseURL: https://prod-merchant-service.hoolah.co/merchant
+  tags:
+  - Orders
+  - Authentication
+  - Account Linking
+  - Pre-Auth
+  - Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/shopback-online-payments-openapi.yml
+  - type: Overlay
+    url: overlays/shopback-online-payments-overlay.yaml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/bespoke
+  - type: APIReference
+    url: https://docs.shopback.com/reference/initiateorder
+  - type: Authentication
+    url: authentication/shopback-authentication.yml
+  - type: ErrorCatalog
+    url: errors/shopback-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/shopback-payment-notification-webhooks.yml
+- aid: shopback:shopback-in-store-payments-api
+  name: ShopBack In-Store Payments API
+  description: >-
+    The ShopBack In-Store Payments API (v1.4) accepts ShopBack Pay at the point of
+    sale and in customer-facing apps and websites. It supports merchant-presented
+    dynamic QR, customer-presented QR scanning and URL redirect flows, with order
+    create, scan, status, refund and cancel operations plus a merchant-implemented
+    payment-notification webhook. Requests are signed with SB1-HMAC-SHA256.
+  humanURL: https://docs.shopback.com/reference/in-store-getting-started
+  baseURL: https://integrations.shopback.sg/posi
+  tags:
+  - Orders
+  - Notification
+  - Point Of Sale
+  - QR Payments
+  properties:
+  - type: OpenAPI
+    url: openapi/shopback-in-store-payments-openapi.yml
+  - type: Overlay
+    url: overlays/shopback-in-store-payments-overlay.yaml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/in-store-integrations
+  - type: APIReference
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: GettingStarted
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: Authentication
+    url: authentication/shopback-authentication.yml
+  - type: ErrorCatalog
+    url: errors/shopback-error-codes.yml
+  - type: Webhooks
+    url: asyncapi/shopback-payment-notification-webhooks.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -20,4 +108,69 @@ maintainers:
   email: info@apis.io
 common:
 - type: Website
-  url: https://forgeglobal.com/shopback_stock/
+  url: https://www.shopback.com/
+- type: DeveloperPortal
+  url: https://docs.shopback.com/
+- type: Documentation
+  url: https://docs.shopback.com/docs/getting-started
+- type: APIReference
+  url: https://docs.shopback.com/reference/initiateorder
+- type: GettingStarted
+  url: https://docs.shopback.com/docs/quickstart-api
+- type: Support
+  url: https://shopback.my.site.com/merchanthelpcenter/s/
+- type: HelpCenter
+  url: https://support.shopback.sg/hc/en-gb
+- type: Blog
+  url: https://www.shopback.com/blog
+- type: GitHubOrganization
+  url: https://github.com/shopback
+- type: Pricing
+  url: https://business.shopback.com/sg/payments
+- type: SignUp
+  url: https://business.shopback.sg/signin
+- type: TermsOfService
+  url: https://support.shopback.com/hc/en-us/articles/33321351340307-Terms-of-use
+- type: PrivacyPolicy
+  url: https://support.shopback.com/hc/en-us/articles/33321399347475-ShopBack-Privacy-Policy
+- type: StatusPage
+  url: https://status.shopback.com/
+- type: Postman
+  url: https://docs.shopback.com/docs/postman-payload-sample
+- type: ChangeLog
+  url: changelog/shopback-changelog.yml
+- type: Lifecycle
+  url: lifecycle/shopback-lifecycle.yml
+- type: Authentication
+  url: authentication/shopback-authentication.yml
+- type: Conventions
+  url: conventions/shopback-conventions.yml
+- type: Idempotency
+  url: conventions/shopback-conventions.yml
+- type: ErrorCatalog
+  url: errors/shopback-problem-types.yml
+- type: Conformance
+  url: conformance/shopback-conformance.yml
+- type: Sandbox
+  url: sandbox/shopback-sandbox.yml
+- type: DataModel
+  url: data-model/shopback-data-model.yml
+- type: Components
+  url: components/shopback-components.yml
+- type: Packages
+  url: packages/shopback-packages.yml
+- type: Webhooks
+  url: asyncapi/shopback-payment-notification-webhooks.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: LLMsTxt
+  url: llms/shopback-llms.txt
+- type: WellKnown
+  url: well-known/shopback-well-known.yml
+- type: DomainSecurity
+  url: security/shopback-domain-security.yml
+x-enrichment:
+  date: '2026-08-02'
+  status: enriched
+  artifacts_added: 26
+  pass: local-v1

@@ -1,0 +1,121 @@
+generated: '2026-08-02'
+method: derived
+source: >-
+  openapi/shopback-online-payments-openapi.yml +
+  openapi/shopback-in-store-payments-openapi.yml
+status: candidate
+summary: >-
+  No official hosted or remote Model Context Protocol server was found for
+  ShopBack. Searched the developer hub (docs.shopback.com, including its
+  llms.txt index), the corporate site, the ShopBack GitHub organisation and the
+  public MCP registries — nothing published, and no /mcp endpoint responds on any
+  ShopBack host. The tool set below is DERIVED from ShopBack's own published
+  OpenAPI operations as a proposal only. It is NOT published by ShopBack, and no
+  `MCPServer` pointer was wired in apis.yml.
+server: null
+transport: null
+url: null
+auth:
+  online_payments:
+    type: http bearer
+    detail: merchant JWT from POST /auth/login, 8 hour lifetime
+  in_store_payments:
+    type: hmac
+    detail: 'Authorization: SB1-HMAC-SHA256 <accessKeyId>:<hmacSignature>'
+  note: >-
+    Both surfaces are merchant-secret authenticated with no scoping or consent
+    model, so any real MCP server would need to run server-side under a merchant
+    identity, never in an end-user agent.
+candidate_tools:
+- name: login_merchant
+  maps_to: POST /auth/login
+  source_operation: openapi/shopback-online-payments-openapi.yml#login
+  description: Exchange merchant credentials for a merchant JWT.
+- name: create_online_order
+  maps_to: POST /order/initiate
+  source_operation: openapi/shopback-online-payments-openapi.yml#initiateOrder
+  description: Initiate a ShopBack Pay online order and return the checkout redirect
+    context.
+- name: get_online_order
+  maps_to: GET /order/{uuid}
+  source_operation: openapi/shopback-online-payments-openapi.yml#getOrderInfo
+  description: Get the status and detail of an online order.
+- name: refund_online_order
+  maps_to: POST /order/{orderUuid}/refund
+  source_operation: openapi/shopback-online-payments-openapi.yml#initiateOrderRefund
+  description: Issue a full or partial refund against an online order.
+- name: initiate_link_session
+  maps_to: POST /tokenized-payment/v1/link-sessions/link
+  source_operation: openapi/shopback-online-payments-openapi.yml#initiate-link-session
+  description: Start an account-linking consent session for a user.
+- name: get_link_session
+  maps_to: GET /tokenized-payment/v1/link-sessions/link/{linkToken}
+  source_operation: openapi/shopback-online-payments-openapi.yml#get-link-session
+  description: Poll the state of an account-linking session.
+- name: swap_payment_token
+  maps_to: POST /tokenized-payment/v1/link-sessions/token
+  source_operation: openapi/shopback-online-payments-openapi.yml#swap-payment-token
+  description: Exchange a one-time auth code for a reusable payment token.
+- name: unlink_payment_token
+  maps_to: POST /tokenized-payment/v1/tokens/unlink
+  source_operation: openapi/shopback-online-payments-openapi.yml#unlink-payment-token
+  description: Revoke a linked payment token.
+- name: get_cashback_balance
+  maps_to: POST /tokenized-payment/v1/tokens/cashback-balance
+  source_operation: openapi/shopback-online-payments-openapi.yml#get-cashback-balance
+  description: Read the available cashback balance for a payment token.
+- name: create_pre_auth
+  maps_to: POST /tokenized-payment/v1/pre-auths
+  source_operation: openapi/shopback-online-payments-openapi.yml#create-pre-auth
+  description: Place a hold on funds for a linked payment token.
+- name: get_pre_auth
+  maps_to: GET /tokenized-payment/v1/pre-auths/{id}
+  source_operation: openapi/shopback-online-payments-openapi.yml#get-pre-auth
+  description: Read the current state of a pre-authorization.
+- name: capture_pre_auth
+  maps_to: POST /tokenized-payment/v1/pre-auths/{id}/capture
+  source_operation: openapi/shopback-online-payments-openapi.yml#capture-pre-auth
+  description: Settle a held pre-authorization and create an order.
+- name: void_pre_auth
+  maps_to: POST /tokenized-payment/v1/pre-auths/{id}/void
+  source_operation: openapi/shopback-online-payments-openapi.yml#void-pre-auth
+  description: Release a held pre-authorization.
+- name: immediate_charge
+  maps_to: POST /tokenized-payment/v1/charge
+  source_operation: openapi/shopback-online-payments-openapi.yml#immediate-charge
+  description: Authorize and capture a tokenized payment in one step.
+- name: create_instore_qr_order
+  maps_to: POST /v1/instore/order/create
+  source_operation: openapi/shopback-in-store-payments-openapi.yml#Create dynamic QR order
+  description: Create an in-store order and return a dynamic QR or redirect URL.
+- name: scan_consumer_qr
+  maps_to: POST /v1/instore/order/scan
+  source_operation: openapi/shopback-in-store-payments-openapi.yml#Scan consumer QR
+  description: Create an in-store order from a consumer-presented QR payload.
+- name: get_instore_order
+  maps_to: GET /v1/instore/order/{referenceId}
+  source_operation: openapi/shopback-in-store-payments-openapi.yml#Get order status
+  description: Get the status and detail of an in-store order.
+- name: refund_instore_order
+  maps_to: POST /v1/instore/order/{referenceId}/refund
+  source_operation: openapi/shopback-in-store-payments-openapi.yml#Order refund
+  description: Refund a captured in-store order.
+- name: cancel_instore_order
+  maps_to: POST /v1/instore/order/{referenceId}/cancel
+  source_operation: openapi/shopback-in-store-payments-openapi.yml#Cancel order
+  description: Cancel an in-store payment before processing.
+agent_safety_notes:
+- Fourteen of the nineteen candidate tools move money or change payment state.
+  Any real server should require the X-ShopBack-Idempotent-Id header on
+  create_online_order, create_pre_auth, immediate_charge and
+  create_instore_qr_order, and should treat capture, refund, void and cancel as
+  human-in-the-loop operations.
+- ShopBack publishes no OAuth scopes or consent model for merchant credentials,
+  so tool-level authorization would have to be enforced by the MCP server itself.
+probes:
+- url: https://docs.shopback.com/llms.txt
+  http_status: 200
+  result: no MCP server referenced
+- url: https://mcp.shopback.com
+  http_status: 000
+  result: host does not resolve
