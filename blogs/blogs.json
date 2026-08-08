@@ -1,0 +1,14 @@
+{
+  "repo": "shopback",
+  "feeds": [
+    {
+      "source": "https://support.shopback.sg/hc/en-gb",
+      "feed_url": "https://support.shopback.sg/hc/en-gb",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-08-06T14:08:46Z"
+}
