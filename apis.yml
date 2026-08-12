@@ -37,28 +37,16 @@ tags:
 - Checkout
 - Singapore
 apis:
-- aid: shopback:shopback-online-payments-api
-  name: ShopBack Online Payments API
-  description: >-
-    The ShopBack Online Payments API (v2.0), also documented as the Online Bespoke
-    API, lets merchants add ShopBack Pay and ShopBack PayLater to any web or app
-    checkout. It covers merchant JWT login, order initiation, order status lookup
-    and full or partial refunds, plus a tokenized-payments surface — link sessions,
-    auth-code exchange for a reusable payment token, token revocation, cashback
-    balance, pre-authorization create/get/capture/void and immediate charge.
+- aid: shopback:shopback-account-linking-api
+  name: ShopBack Account Linking API
+  description: The Account Linking API from ShopBack — 4 operation(s) for account linking.
   humanURL: https://docs.shopback.com/reference/initiateorder
   baseURL: https://prod-merchant-service.hoolah.co/merchant
   tags:
-  - Orders
-  - Authentication
   - Account Linking
-  - Pre-Auth
-  - Payments
   properties:
   - type: OpenAPI
-    url: openapi/shopback-online-payments-openapi.yml
-  - type: Overlay
-    url: overlays/shopback-online-payments-overlay.yaml
+    url: openapi/shopback-account-linking-api-openapi.yml
   - type: Documentation
     url: https://docs.shopback.com/docs/bespoke
   - type: APIReference
@@ -69,44 +57,136 @@ apis:
     url: errors/shopback-problem-types.yml
   - type: Webhooks
     url: asyncapi/shopback-payment-notification-webhooks.yml
-- aid: shopback:shopback-in-store-payments-api
-  name: ShopBack In-Store Payments API
-  description: >-
-    The ShopBack In-Store Payments API (v1.4) accepts ShopBack Pay at the point of
-    sale and in customer-facing apps and websites. It supports merchant-presented
-    dynamic QR, customer-presented QR scanning and URL redirect flows, with order
-    create, scan, status, refund and cancel operations plus a merchant-implemented
-    payment-notification webhook. Requests are signed with SB1-HMAC-SHA256.
-  humanURL: https://docs.shopback.com/reference/in-store-getting-started
-  baseURL: https://integrations.shopback.sg/posi
-  tags:
-  - Orders
-  - Notification
-  - Point Of Sale
-  - QR Payments
-  properties:
-  - type: OpenAPI
-    url: openapi/shopback-in-store-payments-openapi.yml
-  - type: Overlay
-    url: overlays/shopback-in-store-payments-overlay.yaml
   - type: Documentation
     url: https://docs.shopback.com/docs/in-store-integrations
   - type: APIReference
     url: https://docs.shopback.com/reference/in-store-getting-started
   - type: GettingStarted
     url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: ErrorCatalog
+    url: errors/shopback-error-codes.yml
+- aid: shopback:shopback-authentication-api
+  name: ShopBack Authentication API
+  description: The Authentication API from ShopBack — 1 operation(s) for authentication.
+  humanURL: https://docs.shopback.com/reference/initiateorder
+  baseURL: https://prod-merchant-service.hoolah.co/merchant
+  tags:
+  - Authentication
+  properties:
+  - type: OpenAPI
+    url: openapi/shopback-authentication-api-openapi.yml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/bespoke
+  - type: APIReference
+    url: https://docs.shopback.com/reference/initiateorder
   - type: Authentication
     url: authentication/shopback-authentication.yml
   - type: ErrorCatalog
-    url: errors/shopback-error-codes.yml
+    url: errors/shopback-problem-types.yml
   - type: Webhooks
     url: asyncapi/shopback-payment-notification-webhooks.yml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/in-store-integrations
+  - type: APIReference
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: GettingStarted
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: ErrorCatalog
+    url: errors/shopback-error-codes.yml
+- aid: shopback:shopback-notification-api
+  name: ShopBack Notification API
+  description: The Notification API from ShopBack — 1 operation(s) for notification.
+  humanURL: https://docs.shopback.com/reference/initiateorder
+  baseURL: https://prod-merchant-service.hoolah.co/merchant
+  tags:
+  - Notification
+  properties:
+  - type: OpenAPI
+    url: openapi/shopback-notification-api-openapi.yml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/bespoke
+  - type: APIReference
+    url: https://docs.shopback.com/reference/initiateorder
+  - type: Authentication
+    url: authentication/shopback-authentication.yml
+  - type: ErrorCatalog
+    url: errors/shopback-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/shopback-payment-notification-webhooks.yml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/in-store-integrations
+  - type: APIReference
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: GettingStarted
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: ErrorCatalog
+    url: errors/shopback-error-codes.yml
+- aid: shopback:shopback-orders-api
+  name: ShopBack Orders API
+  description: The Orders API from ShopBack — 8 operation(s) for orders.
+  humanURL: https://docs.shopback.com/reference/initiateorder
+  baseURL: https://prod-merchant-service.hoolah.co/merchant
+  tags:
+  - Orders
+  properties:
+  - type: OpenAPI
+    url: openapi/shopback-orders-api-openapi.yml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/bespoke
+  - type: APIReference
+    url: https://docs.shopback.com/reference/initiateorder
+  - type: Authentication
+    url: authentication/shopback-authentication.yml
+  - type: ErrorCatalog
+    url: errors/shopback-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/shopback-payment-notification-webhooks.yml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/in-store-integrations
+  - type: APIReference
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: GettingStarted
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: ErrorCatalog
+    url: errors/shopback-error-codes.yml
+- aid: shopback:shopback-pre-auth-api
+  name: ShopBack Pre Auth API
+  description: The Pre-Auth API from ShopBack — 6 operation(s) for pre-auth.
+  humanURL: https://docs.shopback.com/reference/initiateorder
+  baseURL: https://prod-merchant-service.hoolah.co/merchant
+  tags:
+  - Pre-Auth
+  properties:
+  - type: OpenAPI
+    url: openapi/shopback-pre-auth-api-openapi.yml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/bespoke
+  - type: APIReference
+    url: https://docs.shopback.com/reference/initiateorder
+  - type: Authentication
+    url: authentication/shopback-authentication.yml
+  - type: ErrorCatalog
+    url: errors/shopback-problem-types.yml
+  - type: Webhooks
+    url: asyncapi/shopback-payment-notification-webhooks.yml
+  - type: Documentation
+    url: https://docs.shopback.com/docs/in-store-integrations
+  - type: APIReference
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: GettingStarted
+    url: https://docs.shopback.com/reference/in-store-getting-started
+  - type: ErrorCatalog
+    url: errors/shopback-error-codes.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: MCPServer
+  url: mcp/shopback-mcp.yml
+- type: Overlay
+  url: overlays/shopback-in-store-payments-overlay.yaml
 - type: Website
   url: https://www.shopback.com/
 - type: DeveloperPortal
