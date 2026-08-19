@@ -1,0 +1,141 @@
+{
+  "item": [
+    {
+      "id": "e1e2db34-34b6-443b-a184-035c69b792b7",
+      "name": "Notification",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "65d01fa8-dcb0-4224-b41d-42f752f90a09",
+          "name": "Acknowledge notification",
+          "request": {
+            "name": "Acknowledge notification",
+            "description": {
+              "content": "This API is implemented by the payment partner. ShopBack will send the following request parameters to the `webhookUrl` supplied by the payment partner during onboarding.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "<webhookUrl>"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) The date and time of request in <a href=https://en.wikipedia.org/wiki/ISO_8601 target=\"_blank\">ISO-8601</a> format. This is the same value used in the generation of the HMAC signature",
+                "key": "Date",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"traceId\": \"<string>\",\n  \"shopbackOrderId\": \"<string>\",\n  \"status\": \"<string>\",\n  \"createdAt\": \"<dateTime>\",\n  \"updatedAt\": \"<dateTime>\",\n  \"orderAmount\": \"<number>\",\n  \"refundAmount\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"posId\": \"<string>\",\n  \"paymentType\": \"<string>\",\n  \"failureReason\": \"<string>\",\n  \"referenceId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "675b562e-1541-465c-9959-01a3f45cc113",
+              "name": "ShopBack will record non-200 cases.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "<webhookUrl>"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "(Required) Header provided for authorization. This is provided for optional HMAC verification when ShopBack calls the `webhookUrl`. Please refer to **Generating an HMAC Signature** for a step by step guide to generating the Authorization signature.",
+                    "key": "Authorization",
+                    "value": "SB1-HMAC-SHA256 <accessKeyId>:<hmacSignature>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) The date and time of request in <a href=https://en.wikipedia.org/wiki/ISO_8601 target=\"_blank\">ISO-8601</a> format. This is the same value used in the generation of the HMAC signature",
+                    "key": "Date",
+                    "value": "2022-08-22T02:29:33.123Z"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"traceId\": \"0dc44317-1c4b-4b62-83a8-8997435511e4\",\n  \"shopbackOrderId\": \"220801-0679-YVUY\",\n  \"status\": \"CAPTURED\",\n  \"createdAt\": \"2022-08-01T02:29:33.123Z\",\n  \"updatedAt\": \"2022-08-01T02:29:33.123Z\",\n  \"orderAmount\": 1000,\n  \"refundAmount\": 1000,\n  \"currency\": \"SGD\",\n  \"posId\": \"802c987em7f747269a5e6c260c630kpl\",\n  \"paymentType\": \"PAY\",\n  \"failureReason\": \"352c530dd7f747161a5e6c990c720bec\",\n  \"referenceId\": \"352c530dd7f747161a5e6c990c720bec\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"referenceId\": \"352c530dd7f747161a5e6c990c720bec\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://integrations-sandbox.shopback.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "64a9bcac-c7b7-4525-b3c8-6b3f38755959",
+    "name": "In-Store Payments Notification API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

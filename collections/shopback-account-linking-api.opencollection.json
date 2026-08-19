@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Online Payments Account Linking API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Account Linking",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get link session status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/link-sessions/link/:linkToken",
+            "params": [
+              {
+                "name": "linkToken",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The link session UUID returned by `POST /link-sessions/link`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the current state of a tokenized payment link session. Poll this endpoint after redirecting the user to determine when the consent flow is complete."
+        },
+        {
+          "info": {
+            "name": "Initiate a tokenized payment link session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/link-sessions/link",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a PENDING link session and returns a `redirectUrl` and `appToken`. The merchant opens `redirectUrl` in an in-app browser and passes `appToken` as `X-ShopBack-App-Token`."
+        },
+        {
+          "info": {
+            "name": "Exchange an auth code for a payment token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/link-sessions/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Validates the one-time auth code issued after the user completes the ShopBack consent flow and returns a reusable payment token scoped to the merchant channel."
+        },
+        {
+          "info": {
+            "name": "Revoke a linked payment token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/tokens/unlink",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Unlinks a payment token for the authenticated merchant channel. Returns 400 if an active pre-auth (AUTHORIZED) is still open for the account."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

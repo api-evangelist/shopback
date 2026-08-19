@@ -1,0 +1,367 @@
+{
+  "item": [
+    {
+      "id": "1411eb9c-c723-428b-8246-d9fd77950b85",
+      "name": "Authentication",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6f73e317-c68e-43ec-b657-4cae795d8af4",
+          "name": "Login",
+          "request": {
+            "name": "Login",
+            "description": {
+              "content": "There is a clean Login and Logout process associated with the Authentication process. Before you can  Login, you need to obtain credentials from ShopBack - provided after registering a set of valid merchant details.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "login"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Idempotent Id for the request. If this is absent,  every request will be treated as unique and will be processed as such. (This is optional for now, but will be made required in the future)",
+                "key": "X-ShopBack-Idempotent-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"<string>\",\n  \"username\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "79789fd3-05d2-4bfb-9795-67a5759d0a91",
+              "name": "successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "login"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Idempotent Id for the request. If this is absent,  every request will be treated as unique and will be processed as such. (This is optional for now, but will be made required in the future)",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "faa5e09a-8cf3-43f7-8309-d94deb426e66"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"TK_sandbox123\",\n  \"username\": \"abcde-12345-abcde12345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"token\": \"local-RUZvpBJr56eC5X0ZVXog4TnZ3Rp8GsF9UWZyWv9o7iM\",\n  \"expiresAt\": \"2019-01-05T20:18:32.651+05:30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "192d2862-2611-4a48-90f3-c23c5cc1b885",
+              "name": "Created, Entity is created successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "login"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Idempotent Id for the request. If this is absent,  every request will be treated as unique and will be processed as such. (This is optional for now, but will be made required in the future)",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "faa5e09a-8cf3-43f7-8309-d94deb426e66"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"TK_sandbox123\",\n  \"username\": \"abcde-12345-abcde12345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "20764c85-253a-4319-80ca-b3721573adf4",
+              "name": "Unauthorized Access, You are providing invalid credentials",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "login"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Idempotent Id for the request. If this is absent,  every request will be treated as unique and will be processed as such. (This is optional for now, but will be made required in the future)",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "faa5e09a-8cf3-43f7-8309-d94deb426e66"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"TK_sandbox123\",\n  \"username\": \"abcde-12345-abcde12345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "321e3032-cbe2-4145-abdc-6ee13aa299f5",
+              "name": "Precondition Failed, Username/Email is already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "login"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Idempotent Id for the request. If this is absent,  every request will be treated as unique and will be processed as such. (This is optional for now, but will be made required in the future)",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "faa5e09a-8cf3-43f7-8309-d94deb426e66"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"TK_sandbox123\",\n  \"username\": \"abcde-12345-abcde12345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Precondition Failed",
+              "code": 412,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "94de11e9-de82-4d33-8d24-879b2d035daa",
+              "name": "Unprocessable Entity, Could not process the entity as it has invalid data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "login"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Idempotent Id for the request. If this is absent,  every request will be treated as unique and will be processed as such. (This is optional for now, but will be made required in the future)",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "faa5e09a-8cf3-43f7-8309-d94deb426e66"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"TK_sandbox123\",\n  \"username\": \"abcde-12345-abcde12345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8c2b45e3-e74b-4aba-8723-a325e9fa1a27",
+              "name": "Internal Server Error, Something went wrong on servers's end",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "auth",
+                    "login"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "disabled": false,
+                    "description": "Idempotent Id for the request. If this is absent,  every request will be treated as unique and will be processed as such. (This is optional for now, but will be made required in the future)",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "faa5e09a-8cf3-43f7-8309-d94deb426e66"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"TK_sandbox123\",\n  \"username\": \"abcde-12345-abcde12345\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://integrations-sandbox.shopback.com/demo/merchant",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "8cc52fb3-db09-4752-af5d-edf671b3bcbc",
+    "name": "Online Payments Authentication API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

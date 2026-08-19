@@ -1,0 +1,29 @@
+{
+  "provider": "shopback",
+  "sources": [
+    "shopback-account-linking-api-openapi.yml",
+    "shopback-authentication-api-openapi.yml",
+    "shopback-notification-api-openapi.yml",
+    "shopback-orders-api-openapi.yml",
+    "shopback-pre-auth-api-openapi.yml"
+  ],
+  "outputs": [
+    "shopback-account-linking-api-openapi.yml",
+    "shopback-authentication-api-openapi.yml",
+    "shopback-notification-api-openapi.yml",
+    "shopback-orders-api-openapi.yml",
+    "shopback-pre-auth-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [
+    "shopback-account-linking-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "shopback-authentication-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "shopback-notification-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "shopback-orders-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "shopback-pre-auth-api-openapi.yml: upgraded openapi 3.0.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": []
+}

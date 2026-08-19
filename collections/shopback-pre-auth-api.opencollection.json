@@ -1,0 +1,163 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Online Payments Pre Auth API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Pre-Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Capture a pre-authorization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/pre-auths/:id/capture",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Executes the held funds for a pre-authorization and creates an order. The pre-auth must be in AUTHORIZED status."
+        },
+        {
+          "info": {
+            "name": "Create a pre-authorization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/pre-auths",
+            "headers": [
+              {
+                "name": "X-ShopBack-Idempotent-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Places a hold on the funds associated with a payment token. Use capture to settle or void to release the hold."
+        },
+        {
+          "info": {
+            "name": "Get cashback balance for a payment token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/tokens/cashback-balance",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the user's available cashback balance for the merchant channel associated with the payment token."
+        },
+        {
+          "info": {
+            "name": "Get a pre-authorization by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/pre-auths/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "Pre-authorization UUID returned by POST /pre-auths."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the current state of a pre-authorization. Use this to poll for status transitions after create, capture, or void operations."
+        },
+        {
+          "info": {
+            "name": "Immediate tokenized payment charge (auth + capture)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/charge",
+            "headers": [
+              {
+                "name": "X-ShopBack-Idempotent-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Charges the user's linked payment method in a single step without a pre-authorization hold. Use this for one-shot payments where you do not need to adjust the amount before capture."
+        },
+        {
+          "info": {
+            "name": "Void a pre-authorization",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/tokenized-payment/v1/pre-auths/:id/void",
+            "params": [
+              {
+                "name": "id",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "Pre-authorization UUID returned by POST /pre-auths."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Releases the held funds for a pre-authorization. The pre-auth must be in AUTHORIZED status. If the provider rejects the void, the pre-auth stays AUTHORIZED and the merchant may retry."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

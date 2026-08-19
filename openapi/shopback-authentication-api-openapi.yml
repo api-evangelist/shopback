@@ -1,0 +1,123 @@
+openapi: 3.2.0
+info:
+  title: Online Payments Authentication API
+  version: '2.0'
+servers:
+- url: https://integrations-sandbox.shopback.com/demo/merchant
+  description: staging environment
+tags:
+- name: Authentication
+paths:
+  /auth/login:
+    post:
+      tags:
+      - Authentication
+      description: There is a clean Login and Logout process associated with the Authentication process. Before you can  Login, you need to obtain credentials from ShopBack - provided after registering a set of valid merchant details.
+      parameters:
+      - name: X-ShopBack-Idempotent-Id
+        in: header
+        description: Idempotent Id for the request. If this is absent,  every request will be treated as unique and will be processed as such. (This is optional for now, but will be made required in the future)
+        schema:
+          example: faa5e09a-8cf3-43f7-8309-d94deb426e66
+          type: string
+      summary: Login
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        required: false
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '201':
+          description: Created, Entity is created successfully
+          content: {}
+        '401':
+          description: Unauthorized Access, You are providing invalid credentials
+          content: {}
+        '412':
+          description: Precondition Failed, Username/Email is already exists
+          content: {}
+        '422':
+          description: Unprocessable Entity, Could not process the entity as it has invalid data
+          content: {}
+        '500':
+          description: Internal Server Error, Something went wrong on servers's end
+          content: {}
+      x-codegen-request-body-name: body
+      x-source-doc: https://docs.shopback.com/reference/login
+components:
+  schemas:
+    LoginRequest:
+      required:
+      - password
+      - username
+      type: object
+      properties:
+        username:
+          type: string
+          description: This will be the merchant ID provided by ShopBack
+          example: abcde-12345-abcde12345
+        password:
+          type: string
+          description: This will be the merchant secret proviced by ShopBack. TK_ for Sandbox, PK_ for Production
+          example: TK_sandbox123
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Auth token provided by ShopBack to the merchant
+          example: local-RUZvpBJr56eC5X0ZVXog4TnZ3Rp8GsF9UWZyWv9o7iM
+        expiresAt:
+          type: string
+          description: Token expiry
+          format: date-time
+          example: '2019-01-05T20:18:32.651+05:30'
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Merchant JWT obtained from POST /merchant-gateway/auth/login.
+x-tagGroups:
+- name: Orders
+  tags:
+  - Orders
+- name: Authentication
+  tags:
+  - Authentication
+- name: Platform
+  tags:
+  - Platform
+- name: Tokenized Payment
+  tags:
+  - Account Linking
+  - Pre-Auth
+x-apievangelist-assembly:
+  method: searched
+  note: Assembled verbatim from the per-operation OpenAPI definitions ShopBack publishes on each API reference page of docs.shopback.com (ReadMe .md export). No content was authored or altered; path items, schemas and security schemes are exactly as published.
+  fetched: '2026-08-02'
+  index: https://docs.shopback.com/llms.txt
+  sources:
+  - https://docs.shopback.com/reference/capture-pre-auth.md
+  - https://docs.shopback.com/reference/create-pre-auth.md
+  - https://docs.shopback.com/reference/get-cashback-balance.md
+  - https://docs.shopback.com/reference/get-link-session.md
+  - https://docs.shopback.com/reference/get-pre-auth.md
+  - https://docs.shopback.com/reference/getorderinfo.md
+  - https://docs.shopback.com/reference/immediate-charge.md
+  - https://docs.shopback.com/reference/initiate-link-session.md
+  - https://docs.shopback.com/reference/initiateorder.md
+  - https://docs.shopback.com/reference/initiateorderrefund.md
+  - https://docs.shopback.com/reference/login.md
+  - https://docs.shopback.com/reference/swap-payment-token.md
+  - https://docs.shopback.com/reference/unlink-payment-token.md
+  - https://docs.shopback.com/reference/void-pre-auth.md
+  http_status: 200

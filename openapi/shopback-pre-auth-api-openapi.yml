@@ -1,0 +1,651 @@
+openapi: 3.2.0
+info:
+  title: Online Payments Pre Auth API
+  version: '2.0'
+servers:
+- url: https://integrations-sandbox.shopback.com/demo/merchant
+  description: staging environment
+tags:
+- name: Pre-Auth
+paths:
+  /tokenized-payment/v1/pre-auths/{id}/capture:
+    post:
+      operationId: capture-pre-auth
+      summary: Capture a pre-authorization
+      description: Executes the held funds for a pre-authorization and creates an order. The pre-auth must be in AUTHORIZED status.
+      tags:
+      - Pre-Auth
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        required: true
+        in: path
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CapturePreAuthRequestDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CapturePreAuthResponseDto'
+        '401':
+          description: Missing or invalid merchant JWT.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '404':
+          description: Pre-authorization not found or belongs to a different merchant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '409':
+          description: The pre-authorization has already been captured, voided, declined, or has expired.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+      x-source-doc: https://docs.shopback.com/reference/capture-pre-auth
+  /tokenized-payment/v1/pre-auths:
+    post:
+      operationId: create-pre-auth
+      summary: Create a pre-authorization
+      description: Places a hold on the funds associated with a payment token. Use capture to settle or void to release the hold.
+      tags:
+      - Pre-Auth
+      security:
+      - bearer: []
+      parameters:
+      - name: X-ShopBack-Idempotent-Id
+        in: header
+        description: Unique key to safely retry the request without duplicate holds. Use a UUID per logical pre-auth attempt.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePreAuthRequestDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreAuthResponseDto'
+        '400':
+          description: One or more required fields are missing, the amount must be greater than zero, or the currency is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '401':
+          description: The payment token was not found, has been unlinked, or belongs to a different merchant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+      x-source-doc: https://docs.shopback.com/reference/create-pre-auth
+  /tokenized-payment/v1/tokens/cashback-balance:
+    post:
+      operationId: get-cashback-balance
+      summary: Get cashback balance for a payment token
+      description: Returns the user's available cashback balance for the merchant channel associated with the payment token.
+      tags:
+      - Pre-Auth
+      security:
+      - bearer: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetCashbackBalanceRequest'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetCashbackBalanceResponse'
+        '400':
+          description: The paymentToken field is required.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '401':
+          description: Missing or invalid merchant JWT, or the payment token was not found, has been unlinked, or belongs to a different merchant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+      x-source-doc: https://docs.shopback.com/reference/get-cashback-balance
+  /tokenized-payment/v1/pre-auths/{id}:
+    get:
+      operationId: get-pre-auth
+      summary: Get a pre-authorization by ID
+      description: Returns the current state of a pre-authorization. Use this to poll for status transitions after create, capture, or void operations.
+      tags:
+      - Pre-Auth
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Pre-authorization UUID returned by POST /pre-auths.
+        example: 550e8400-e29b-41d4-a716-446655440000
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Pre-auth found and returned.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreAuthResponseDto'
+        '400':
+          description: The provided ID is not in a valid format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '401':
+          description: Missing or invalid merchant JWT.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '404':
+          description: Pre-authorization not found or belongs to a different merchant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+      x-source-doc: https://docs.shopback.com/reference/get-pre-auth
+  /tokenized-payment/v1/charge:
+    post:
+      operationId: immediate-charge
+      summary: Immediate tokenized payment charge (auth + capture)
+      description: Charges the user's linked payment method in a single step without a pre-authorization hold. Use this for one-shot payments where you do not need to adjust the amount before capture.
+      tags:
+      - Pre-Auth
+      security:
+      - bearer: []
+      parameters:
+      - name: X-ShopBack-Idempotent-Id
+        in: header
+        description: Unique key to safely retry the request without duplicate charges. Use a UUID per logical charge attempt.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ImmediateChargeRequestDto'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImmediateChargeResponseDto'
+        '400':
+          description: One or more required fields are missing, the amount must be greater than zero, or the currency is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '401':
+          description: The payment token was not found, has been unlinked, or belongs to a different merchant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+      x-source-doc: https://docs.shopback.com/reference/immediate-charge
+  /tokenized-payment/v1/pre-auths/{id}/void:
+    post:
+      operationId: void-pre-auth
+      summary: Void a pre-authorization
+      description: Releases the held funds for a pre-authorization. The pre-auth must be in AUTHORIZED status. If the provider rejects the void, the pre-auth stays AUTHORIZED and the merchant may retry.
+      tags:
+      - Pre-Auth
+      security:
+      - bearer: []
+      parameters:
+      - name: id
+        required: true
+        in: path
+        description: Pre-authorization UUID returned by POST /pre-auths.
+        example: 550e8400-e29b-41d4-a716-446655440000
+        schema:
+          type: string
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoidPreAuthRequest'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PreAuthResponseDto'
+        '401':
+          description: Missing or invalid merchant JWT.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '404':
+          description: Pre-authorization not found or belongs to a different merchant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '409':
+          description: The pre-authorization is in a state that cannot be voided (already captured, voided, declined, or expired).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+      x-source-doc: https://docs.shopback.com/reference/void-pre-auth
+components:
+  schemas:
+    VoidPreAuthRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Optional free-text reason for voiding. Stored verbatim on the pre-auth lifecycle.
+          example: Rider cancelled before driver arrived
+          maxLength: 500
+        merchantMetadata:
+          type: object
+          description: Opaque JSON blob stored verbatim on the pre-auth row, replacing any value set at creation. Max 5 keys; each string value must not exceed 200 characters.
+          example:
+            replacesPaymentId: ord-D
+            tripId: trip-456
+    CapturePreAuthResponseDto:
+      required:
+      - uuid
+      - orderUuid
+      - status
+      - orderType
+      - merchantRef
+      - merchantOrderId
+      - consumerEmail
+      - createdAt
+      - failureReason
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: Pre-authorization UUID.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        orderUuid:
+          type: string
+          description: UUID of the settled order created by this capture.
+          example: 7b3f1234-ab12-4321-b123-000000000001
+        status:
+          type: string
+          description: Order status after capture.
+          example: APPROVED
+        orderType:
+          type: string
+          description: Order type.
+          example: ONLINE
+        merchantRef:
+          type: string
+          description: Merchant's reference ID supplied at pre-auth creation.
+          example: trip-456
+        merchantOrderId:
+          type: string
+          description: Merchant's order ID.
+          example: order-789
+        consumerEmail:
+          type: string
+          description: Consumer's email address.
+          example: user@example.com
+        createdAt:
+          type: string
+          description: ISO 8601 creation timestamp.
+          example: '2026-04-30T10:00:00.000Z'
+        failureReason:
+          type:
+          - string
+          - 'null'
+          description: null on a successful capture; error code when the payment is declined.
+          example: null
+    GetCashbackBalanceResponse:
+      required:
+      - cashbackBalance
+      - currency
+      type: object
+      properties:
+        cashbackBalance:
+          type: number
+          description: Available cashback balance in major units (e.g. 15.00 = $15.00).
+          example: 15
+        currency:
+          type: string
+          description: 3-letter ISO currency code for the balance.
+          example: SGD
+    CapturePreAuthRequestDto:
+      type: object
+      properties:
+        useCashback:
+          type: boolean
+          description: Whether to apply available cashback balance at capture. Defaults to true.
+          example: true
+        merchantMetadata:
+          type: object
+          description: Opaque JSON blob stored verbatim and returned on read endpoints. Max 5 keys; each string value must not exceed 200 characters.
+          example:
+            tripId: trip-456
+        callbackUrl:
+          type: string
+          description: HTTPS URL to receive order status webhook notifications. When provided, ShopBack will POST the order outcome to this URL upon capture.
+          example: https://merchant.example.com/webhooks/shopback
+    ImmediateChargeRequestDto:
+      required:
+      - paymentToken
+      - merchantUserId
+      - amount
+      - currency
+      - merchantRef
+      type: object
+      properties:
+        paymentToken:
+          type: string
+          description: Payment token from POST /token. Resolves the user and their default card.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+        merchantUserId:
+          type: string
+          description: Merchant's opaque identifier for the end user. Must match the merchantUserId used when the paymentToken was issued.
+          example: merchant_rider_42
+        amount:
+          type: number
+          description: Charge amount. Must be > 0.
+          example: 17
+        currency:
+          type: string
+          description: 3-letter ISO currency code. Must match the merchant channel country currency.
+          example: SGD
+        merchantRef:
+          type: string
+          description: Merchant's reference ID. Used for idempotent duplicate detection.
+          example: trip-456-tip
+        useCashback:
+          type: boolean
+          description: Whether to apply available cashback to this charge.
+          example: true
+          default: true
+        callbackUrl:
+          type: string
+          description: HTTPS URL to receive order status webhook notifications. When provided, ShopBack will POST the order outcome to this URL upon payment completion or failure. Must use HTTPS with a valid public domain.
+          example: https://merchant.example.com/webhooks/shopback
+    CreatePreAuthRequestDto:
+      required:
+      - paymentToken
+      - merchantUserId
+      - amount
+      - currency
+      - merchantRef
+      type: object
+      properties:
+        paymentToken:
+          type: string
+          description: Payment token from POST /token. Resolves the user and their default card.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+        merchantUserId:
+          type: string
+          description: Merchant's opaque identifier for the end user (e.g. user ID). Used to verify the payment token belongs to this user.
+          example: merchant_rider_42
+        amount:
+          type: number
+          description: Hold amount. Must be > 0. Also the capture amount.
+          example: 20.5
+        currency:
+          type: string
+          description: 3-letter ISO currency code. Must match the merchant channel country currency.
+          example: SGD
+        merchantRef:
+          type: string
+          description: Merchant's reference ID (e.g. trip ID). Used for idempotent duplicate detection.
+          example: trip-456
+        merchantMetadata:
+          type: object
+          description: Opaque JSON blob stored verbatim and returned on read endpoints. Max 5 keys; each string value must not exceed 200 characters.
+          example:
+            tripId: trip-456
+            estimatedMinutes: 30
+    ImmediateChargeResponseDto:
+      required:
+      - uuid
+      - orderUuid
+      - status
+      - orderType
+      - merchantRef
+      - merchantOrderId
+      - consumerEmail
+      - failureReason
+      - createdAt
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: Charge UUID.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        orderUuid:
+          type: string
+          description: UUID of the settled order created by this charge.
+          example: 7b3f1234-ab12-4321-b123-000000000001
+        status:
+          type: string
+          description: Order status after charge.
+          example: APPROVED
+        orderType:
+          type: string
+          description: Order type.
+          example: ONLINE
+        merchantRef:
+          type: string
+          description: Merchant's reference ID supplied at charge creation.
+          example: trip-456-tip
+        merchantOrderId:
+          type: string
+          description: Merchant's order ID.
+          example: order-789
+        consumerEmail:
+          type: string
+          description: Consumer's email address.
+          example: user@example.com
+        failureReason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason if the charge failed; null on success.
+          example: null
+        createdAt:
+          type: string
+          description: ISO 8601 creation timestamp.
+          example: '2026-04-30T10:00:00.000Z'
+    GetCashbackBalanceRequest:
+      required:
+      - paymentToken
+      type: object
+      properties:
+        paymentToken:
+          type: string
+          description: Payment token issued by ShopBack to identify the linked ShopBack user.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+    PreAuthResponseDto:
+      required:
+      - id
+      - merchantRef
+      - status
+      - amount
+      - currency
+      - orderUuid
+      - orderStatus
+      - failureReason
+      - merchantMetadata
+      - createdAt
+      - updatedAt
+      type: object
+      properties:
+        id:
+          type: string
+          description: Pre-authorization UUID.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        merchantRef:
+          type: string
+          description: Merchant's reference ID supplied at creation.
+          example: trip-456
+        status:
+          type: string
+          description: Lifecycle state of the pre-authorization.
+          enum:
+          - PENDING
+          - AUTHORIZED
+          - CAPTURE_INITIATED
+          - CAPTURED
+          - VOIDED
+          - DECLINED
+          - EXPIRED
+          example: AUTHORIZED
+        amount:
+          type: number
+          description: Hold amount in major currency units.
+          example: 20.5
+        currency:
+          type: string
+          description: 3-letter ISO currency code.
+          example: SGD
+        orderUuid:
+          type:
+          - string
+          - 'null'
+          description: UUID of the settled order. Non-null after capture.
+          example: 7b3f1234-ab12-4321-b123-000000000001
+        orderStatus:
+          type:
+          - string
+          - 'null'
+          description: Status of the settled order. Non-null after capture.
+          example: COMPLETED
+        failureReason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason if the pre-auth was declined or expired.
+          example: null
+        merchantMetadata:
+          type:
+          - object
+          - 'null'
+          description: Merchant-supplied metadata stored verbatim at creation.
+          example:
+            tripId: trip-456
+        createdAt:
+          type: string
+          description: ISO 8601 creation timestamp.
+          example: '2026-04-30T10:00:00.000Z'
+        updatedAt:
+          type: string
+          description: ISO 8601 last-updated timestamp.
+          example: '2026-04-30T10:05:00.000Z'
+    MgsExternalErrorResponseDto:
+      required:
+      - statusCode
+      - errorMessages
+      - errorId
+      - name
+      - errorCode
+      - code
+      - helpUrl
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        errorMessages:
+          example:
+          - Pre-auth not found
+          type: array
+          items:
+            type: string
+        errorId:
+          type: string
+          example: trace-id-abc123
+        name:
+          type: string
+          example: NOT_FOUND
+        errorCode:
+          type: string
+          example: NOT_FOUND
+        code:
+          type: string
+          example: pre-auth.not-found
+        helpUrl:
+          type: string
+          example: https://support.hoolah.co/error?code=pre-auth.not-found
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Merchant JWT obtained from POST /merchant-gateway/auth/login.
+x-tagGroups:
+- name: Orders
+  tags:
+  - Orders
+- name: Authentication
+  tags:
+  - Authentication
+- name: Platform
+  tags:
+  - Platform
+- name: Tokenized Payment
+  tags:
+  - Account Linking
+  - Pre-Auth
+x-apievangelist-assembly:
+  method: searched
+  note: Assembled verbatim from the per-operation OpenAPI definitions ShopBack publishes on each API reference page of docs.shopback.com (ReadMe .md export). No content was authored or altered; path items, schemas and security schemes are exactly as published.
+  fetched: '2026-08-02'
+  index: https://docs.shopback.com/llms.txt
+  sources:
+  - https://docs.shopback.com/reference/capture-pre-auth.md
+  - https://docs.shopback.com/reference/create-pre-auth.md
+  - https://docs.shopback.com/reference/get-cashback-balance.md
+  - https://docs.shopback.com/reference/get-link-session.md
+  - https://docs.shopback.com/reference/get-pre-auth.md
+  - https://docs.shopback.com/reference/getorderinfo.md
+  - https://docs.shopback.com/reference/immediate-charge.md
+  - https://docs.shopback.com/reference/initiate-link-session.md
+  - https://docs.shopback.com/reference/initiateorder.md
+  - https://docs.shopback.com/reference/initiateorderrefund.md
+  - https://docs.shopback.com/reference/login.md
+  - https://docs.shopback.com/reference/swap-payment-token.md
+  - https://docs.shopback.com/reference/unlink-payment-token.md
+  - https://docs.shopback.com/reference/void-pre-auth.md
+  http_status: 200

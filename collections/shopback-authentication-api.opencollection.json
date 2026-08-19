@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Online Payments Authentication API",
+    "version": "2.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Authentication",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Login",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/demo/merchant/auth/login",
+            "headers": [
+              {
+                "name": "X-ShopBack-Idempotent-Id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "There is a clean Login and Logout process associated with the Authentication process. Before you can  Login, you need to obtain credentials from ShopBack - provided after registering a set of valid merchant details."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

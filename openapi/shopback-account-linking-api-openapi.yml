@@ -1,0 +1,368 @@
+openapi: 3.2.0
+info:
+  title: Online Payments Account Linking API
+  version: '2.0'
+servers:
+- url: https://integrations-sandbox.shopback.com/demo/merchant
+  description: staging environment
+tags:
+- name: Account Linking
+paths:
+  /tokenized-payment/v1/link-sessions/link/{linkToken}:
+    get:
+      operationId: get-link-session
+      summary: Get link session status
+      description: Returns the current state of a tokenized payment link session. Poll this endpoint after redirecting the user to determine when the consent flow is complete.
+      tags:
+      - Account Linking
+      security:
+      - bearer: []
+      parameters:
+      - name: linkToken
+        required: true
+        in: path
+        description: The link session UUID returned by `POST /link-sessions/link`.
+        example: 550e8400-e29b-41d4-a716-446655440000
+        schema:
+          type: string
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetLinkSessionResponse'
+        '401':
+          description: Missing or invalid merchant JWT.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '404':
+          description: Link session not found or belongs to a different merchant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+      x-source-doc: https://docs.shopback.com/reference/get-link-session
+  /tokenized-payment/v1/link-sessions/link:
+    post:
+      operationId: initiate-link-session
+      summary: Initiate a tokenized payment link session
+      description: Creates a PENDING link session and returns a `redirectUrl` and `appToken`. The merchant opens `redirectUrl` in an in-app browser and passes `appToken` as `X-ShopBack-App-Token`.
+      tags:
+      - Account Linking
+      security:
+      - bearer: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitiateLinkSessionRequest'
+      responses:
+        '200':
+          description: Link session created; merchant should redirect user to `redirectUrl`.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitiateLinkSessionResponse'
+        '400':
+          description: Invalid request body, malformed `callbackUrl`, `callbackUrl` not on the channel allowlist, or `userHint` missing or contains no sub-fields.
+        '401':
+          description: Missing or invalid merchant JWT.
+      x-source-doc: https://docs.shopback.com/reference/initiate-link-session
+  /tokenized-payment/v1/link-sessions/token:
+    post:
+      operationId: swap-payment-token
+      summary: Exchange an auth code for a payment token
+      description: Validates the one-time auth code issued after the user completes the ShopBack consent flow and returns a reusable payment token scoped to the merchant channel.
+      tags:
+      - Account Linking
+      security:
+      - bearer: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SwapPaymentTokenRequest'
+      responses:
+        '200':
+          description: ''
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwapPaymentTokenResponse'
+        '400':
+          description: The auth code is missing, the link session is not ready to exchange a code, the auth code has expired, or the auth code is incorrect.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '401':
+          description: Missing or invalid merchant JWT.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+        '404':
+          description: Link session not found or belongs to a different merchant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MgsExternalErrorResponseDto'
+      x-source-doc: https://docs.shopback.com/reference/swap-payment-token
+  /tokenized-payment/v1/tokens/unlink:
+    post:
+      operationId: unlink-payment-token
+      summary: Revoke a linked payment token
+      description: Unlinks a payment token for the authenticated merchant channel. Returns 400 if an active pre-auth (AUTHORIZED) is still open for the account.
+      tags:
+      - Account Linking
+      security:
+      - bearer: []
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnlinkPaymentTokenRequest'
+      responses:
+        '200':
+          description: Payment token successfully unlinked.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnlinkPaymentTokenResponse'
+        '400':
+          description: paymentToken field is missing from the body, or an active pre-auth blocks the unlink.
+        '401':
+          description: Missing or invalid merchant JWT.
+        '404':
+          description: Payment token not found or already unlinked.
+      x-source-doc: https://docs.shopback.com/reference/unlink-payment-token
+components:
+  schemas:
+    UnlinkPaymentTokenRequest:
+      required:
+      - paymentToken
+      type: object
+      properties:
+        paymentToken:
+          type: string
+          description: Payment token to revoke. Sent in the request body (not the URL) to prevent the value from appearing in access logs and APM telemetry.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+    MgsExternalErrorResponseDto:
+      required:
+      - statusCode
+      - errorMessages
+      - errorId
+      - name
+      - errorCode
+      - code
+      - helpUrl
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        errorMessages:
+          example:
+          - Pre-auth not found
+          type: array
+          items:
+            type: string
+        errorId:
+          type: string
+          example: trace-id-abc123
+        name:
+          type: string
+          example: NOT_FOUND
+        errorCode:
+          type: string
+          example: NOT_FOUND
+        code:
+          type: string
+          example: pre-auth.not-found
+        helpUrl:
+          type: string
+          example: https://support.hoolah.co/error?code=pre-auth.not-found
+    GetLinkSessionResponse:
+      required:
+      - linkToken
+      - status
+      - expiresAt
+      - authCode
+      - authCodeExpiresAt
+      type: object
+      properties:
+        linkToken:
+          type: string
+          description: Opaque UUID identifying the linking session (the merchant-facing `linkToken`).
+          example: 550e8400-e29b-41d4-a716-446655440000
+        status:
+          type: string
+          description: Current lifecycle state of the link session.
+          enum:
+          - PENDING
+          - CODE_ISSUED
+          - COMPLETED
+          - EXPIRED
+          example: PENDING
+        expiresAt:
+          type: string
+          description: Overall session TTL (20 min from creation). After this the session transitions to EXPIRED.
+          example: '2026-04-30T10:20:00.000Z'
+        authCode:
+          type:
+          - string
+          - 'null'
+          description: Short-lived auth code issued after rider consent. Non-null only when `status = CODE_ISSUED`; pass to `POST /token` to complete the exchange.
+          example: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4
+        authCodeExpiresAt:
+          type:
+          - string
+          - 'null'
+          description: 60-second TTL on `authCode`. Non-null only when `status = CODE_ISSUED`.
+          example: '2026-04-30T10:01:05.000Z'
+    UserHintDto:
+      type: object
+      properties:
+        phone:
+          type: string
+          description: Pre-redacted phone number as registered with the merchant (e.g. "+6591xxxx67"). Displayed as-is on the consent page. The merchant is responsible for redacting before sending.
+          example: +6591xxxx67
+          maxLength: 30
+        email:
+          type: string
+          description: Pre-redacted email address as registered with the merchant (e.g. "r***@example.com"). Displayed as-is on the consent page. The merchant is responsible for redacting before sending.
+          example: r***@example.com
+          maxLength: 254
+    SwapPaymentTokenRequest:
+      required:
+      - code
+      type: object
+      properties:
+        code:
+          type: string
+          description: The short-lived auth code. Single-use, has TTL.
+          example: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4
+    InitiateLinkSessionRequest:
+      required:
+      - callbackUrl
+      - state
+      - merchantUserId
+      - userHint
+      type: object
+      properties:
+        callbackUrl:
+          type: string
+          description: Merchant callback URL; must be on the per-channel allowlist.
+          example: https://merchant-name.sg/link/callback
+        state:
+          type: string
+          description: Merchant-supplied CSRF nonce; stored verbatim and echoed back unchanged in the callback redirect.
+          example: a8f3c2e1d7b4509f
+        merchantUserId:
+          type: string
+          description: Merchant's opaque user ID. Used to verify that tokenized payments can only be made to the same customer who initiated the link session.
+          example: merchant_user_42
+        userHint:
+          description: Identity hints from the merchant displayed on the ShopBack consent page so the user can verify the linking request was intended for them. At least one sub-field must be present. ShopBack does not validate these values — they are display-only.
+          allOf:
+          - $ref: '#/components/schemas/UserHintDto'
+    UnlinkPaymentTokenResponse:
+      required:
+      - paymentToken
+      - status
+      type: object
+      properties:
+        paymentToken:
+          type: string
+          description: The payment token that was revoked.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+        status:
+          type: string
+          description: New status of the payment token after revocation.
+          enum:
+          - LINKED
+          - UNLINKED
+          example: UNLINKED
+    SwapPaymentTokenResponse:
+      required:
+      - paymentToken
+      type: object
+      properties:
+        paymentToken:
+          type: string
+          description: Long-lived opaque token scoped to (merchant, user, country). Re-linking the same user returns the same value.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+    InitiateLinkSessionResponse:
+      required:
+      - linkToken
+      - redirectUrl
+      - expiresAt
+      - appToken
+      type: object
+      properties:
+        linkToken:
+          type: string
+          description: Opaque UUID identifying the linking session. Not embedded in `redirectUrl`.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        redirectUrl:
+          type: string
+          description: Base ShopBack URL. Does NOT include any token; the merchant appends token(s) themselves before opening the in-app browser. Valid until `expiresAt`.
+          example: https://pay.shopback.com/link
+        expiresAt:
+          type: string
+          description: Session TTL from creation. After this, the session is EXPIRED.
+          example: '2026-04-30T10:20:00.000Z'
+        appToken:
+          type: string
+          description: HS256-signed JWT binding this response to the link session. The payload contains { linkToken } and expires at the same time as the session. Pass this as the X-ShopBack-App-Token header when opening the in-app browser.
+          example: <HS256-signed-jwt>
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Merchant JWT obtained from POST /merchant-gateway/auth/login.
+x-tagGroups:
+- name: Orders
+  tags:
+  - Orders
+- name: Authentication
+  tags:
+  - Authentication
+- name: Platform
+  tags:
+  - Platform
+- name: Tokenized Payment
+  tags:
+  - Account Linking
+  - Pre-Auth
+x-apievangelist-assembly:
+  method: searched
+  note: Assembled verbatim from the per-operation OpenAPI definitions ShopBack publishes on each API reference page of docs.shopback.com (ReadMe .md export). No content was authored or altered; path items, schemas and security schemes are exactly as published.
+  fetched: '2026-08-02'
+  index: https://docs.shopback.com/llms.txt
+  sources:
+  - https://docs.shopback.com/reference/capture-pre-auth.md
+  - https://docs.shopback.com/reference/create-pre-auth.md
+  - https://docs.shopback.com/reference/get-cashback-balance.md
+  - https://docs.shopback.com/reference/get-link-session.md
+  - https://docs.shopback.com/reference/get-pre-auth.md
+  - https://docs.shopback.com/reference/getorderinfo.md
+  - https://docs.shopback.com/reference/immediate-charge.md
+  - https://docs.shopback.com/reference/initiate-link-session.md
+  - https://docs.shopback.com/reference/initiateorder.md
+  - https://docs.shopback.com/reference/initiateorderrefund.md
+  - https://docs.shopback.com/reference/login.md
+  - https://docs.shopback.com/reference/swap-payment-token.md
+  - https://docs.shopback.com/reference/unlink-payment-token.md
+  - https://docs.shopback.com/reference/void-pre-auth.md
+  http_status: 200

@@ -1,17 +1,12 @@
 generated: '2026-08-02'
 method: derived
-source: >-
-  openapi/shopback-online-payments-openapi.yml +
-  openapi/shopback-in-store-payments-openapi.yml
+source: openapi/shopback-online-payments-openapi.yml + openapi/shopback-in-store-payments-openapi.yml
 status: candidate
-summary: >-
-  No official hosted or remote Model Context Protocol server was found for
-  ShopBack. Searched the developer hub (docs.shopback.com, including its
-  llms.txt index), the corporate site, the ShopBack GitHub organisation and the
-  public MCP registries — nothing published, and no /mcp endpoint responds on any
-  ShopBack host. The tool set below is DERIVED from ShopBack's own published
-  OpenAPI operations as a proposal only. It is NOT published by ShopBack, and no
-  `MCPServer` pointer was wired in apis.yml.
+summary: No official hosted or remote Model Context Protocol server was found for ShopBack. Searched the
+  developer hub (docs.shopback.com, including its llms.txt index), the corporate site, the ShopBack GitHub
+  organisation and the public MCP registries — nothing published, and no /mcp endpoint responds on any
+  ShopBack host. The tool set below is DERIVED from ShopBack's own published OpenAPI operations as a proposal
+  only. It is NOT published by ShopBack, and no `MCPServer` pointer was wired in apis.yml.
 server: null
 transport: null
 url: null
@@ -22,10 +17,8 @@ auth:
   in_store_payments:
     type: hmac
     detail: 'Authorization: SB1-HMAC-SHA256 <accessKeyId>:<hmacSignature>'
-  note: >-
-    Both surfaces are merchant-secret authenticated with no scoping or consent
-    model, so any real MCP server would need to run server-side under a merchant
-    identity, never in an end-user agent.
+  note: Both surfaces are merchant-secret authenticated with no scoping or consent model, so any real
+    MCP server would need to run server-side under a merchant identity, never in an end-user agent.
 candidate_tools:
 - name: login_merchant
   maps_to: POST /auth/login
@@ -34,8 +27,7 @@ candidate_tools:
 - name: create_online_order
   maps_to: POST /order/initiate
   source_operation: openapi/shopback-online-payments-openapi.yml#initiateOrder
-  description: Initiate a ShopBack Pay online order and return the checkout redirect
-    context.
+  description: Initiate a ShopBack Pay online order and return the checkout redirect context.
 - name: get_online_order
   maps_to: GET /order/{uuid}
   source_operation: openapi/shopback-online-payments-openapi.yml#getOrderInfo
@@ -105,17 +97,21 @@ candidate_tools:
   source_operation: openapi/shopback-in-store-payments-openapi.yml#Cancel order
   description: Cancel an in-store payment before processing.
 agent_safety_notes:
-- Fourteen of the nineteen candidate tools move money or change payment state.
-  Any real server should require the X-ShopBack-Idempotent-Id header on
-  create_online_order, create_pre_auth, immediate_charge and
-  create_instore_qr_order, and should treat capture, refund, void and cancel as
-  human-in-the-loop operations.
-- ShopBack publishes no OAuth scopes or consent model for merchant credentials,
-  so tool-level authorization would have to be enforced by the MCP server itself.
+- Fourteen of the nineteen candidate tools move money or change payment state. Any real server should
+  require the X-ShopBack-Idempotent-Id header on create_online_order, create_pre_auth, immediate_charge
+  and create_instore_qr_order, and should treat capture, refund, void and cancel as human-in-the-loop
+  operations.
+- ShopBack publishes no OAuth scopes or consent model for merchant credentials, so tool-level authorization
+  would have to be enforced by the MCP server itself.
 probes:
 - url: https://docs.shopback.com/llms.txt
   http_status: 200
   result: no MCP server referenced
 - url: https://mcp.shopback.com
-  http_status: 000
+  http_status: 0
   result: host does not resolve
+deployment:
+  mode: none
+  verified: derived
+  checked: '2026-08-12'
+  source: catalog MCP census

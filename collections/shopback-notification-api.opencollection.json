@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "In-Store Payments Notification API",
+    "version": "1.4"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Notification",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Acknowledge notification",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://integrations-sandbox.shopback.com/<webhookUrl>",
+            "headers": [
+              {
+                "name": "Authorization",
+                "value": ""
+              },
+              {
+                "name": "Date",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This API is implemented by the payment partner. ShopBack will send the following request parameters to the `webhookUrl` supplied by the payment partner during onboarding."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

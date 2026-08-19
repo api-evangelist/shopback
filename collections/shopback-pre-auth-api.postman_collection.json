@@ -1,0 +1,1640 @@
+{
+  "item": [
+    {
+      "id": "f8edd0d8-5635-4c2c-9c5e-c5fc36cacf55",
+      "name": "Pre-Auth",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "36096321-1e80-4c69-b3b8-364fe285ce93",
+          "name": "Capture a pre-authorization",
+          "request": {
+            "name": "Capture a pre-authorization",
+            "description": {
+              "content": "Executes the held funds for a pre-authorization and creates an order. The pre-auth must be in AUTHORIZED status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "pre-auths",
+                ":id",
+                "capture"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"useCashback\": \"<boolean>\",\n  \"merchantMetadata\": \"<object>\",\n  \"callbackUrl\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3e246955-6b7b-4be5-b272-2be7a31787a3",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id",
+                    "capture"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"useCashback\": true,\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\"\n  },\n  \"callbackUrl\": \"https://merchant.example.com/webhooks/shopback\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"orderUuid\": \"7b3f1234-ab12-4321-b123-000000000001\",\n  \"status\": \"APPROVED\",\n  \"orderType\": \"ONLINE\",\n  \"merchantRef\": \"trip-456\",\n  \"merchantOrderId\": \"order-789\",\n  \"consumerEmail\": \"user@example.com\",\n  \"createdAt\": \"2026-04-30T10:00:00.000Z\",\n  \"failureReason\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4576e15-7682-4b19-8438-5e5eef9029e0",
+              "name": "Missing or invalid merchant JWT.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id",
+                    "capture"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"useCashback\": true,\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\"\n  },\n  \"callbackUrl\": \"https://merchant.example.com/webhooks/shopback\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd3e4bee-7404-4e73-841c-1a24c3967d03",
+              "name": "Pre-authorization not found or belongs to a different merchant.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id",
+                    "capture"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"useCashback\": true,\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\"\n  },\n  \"callbackUrl\": \"https://merchant.example.com/webhooks/shopback\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "11563f90-be82-4483-b666-eb61f4c71da1",
+              "name": "The pre-authorization has already been captured, voided, declined, or has expired.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id",
+                    "capture"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"useCashback\": true,\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\"\n  },\n  \"callbackUrl\": \"https://merchant.example.com/webhooks/shopback\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "563527f3-53fa-40e8-868f-42cb55379810",
+          "name": "Create a pre-authorization",
+          "request": {
+            "name": "Create a pre-authorization",
+            "description": {
+              "content": "Places a hold on the funds associated with a payment token. Use capture to settle or void to release the hold.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "pre-auths"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Unique key to safely retry the request without duplicate holds. Use a UUID per logical pre-auth attempt.",
+                "key": "X-ShopBack-Idempotent-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentToken\": \"<string>\",\n  \"merchantUserId\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"merchantRef\": \"<string>\",\n  \"merchantMetadata\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a7e1b1fc-0732-4f06-9dc2-c02a50005e2b",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique key to safely retry the request without duplicate holds. Use a UUID per logical pre-auth attempt.",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\",\n  \"merchantUserId\": \"merchant_rider_42\",\n  \"amount\": 20.5,\n  \"currency\": \"SGD\",\n  \"merchantRef\": \"trip-456\",\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\",\n    \"estimatedMinutes\": 30\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"merchantRef\": \"trip-456\",\n  \"status\": \"AUTHORIZED\",\n  \"amount\": 20.5,\n  \"currency\": \"SGD\",\n  \"orderUuid\": \"7b3f1234-ab12-4321-b123-000000000001\",\n  \"orderStatus\": \"COMPLETED\",\n  \"failureReason\": null,\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\"\n  },\n  \"createdAt\": \"2026-04-30T10:00:00.000Z\",\n  \"updatedAt\": \"2026-04-30T10:05:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77abd8a8-8ece-4b90-88ca-080610a22316",
+              "name": "One or more required fields are missing, the amount must be greater than zero, or the currency is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique key to safely retry the request without duplicate holds. Use a UUID per logical pre-auth attempt.",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\",\n  \"merchantUserId\": \"merchant_rider_42\",\n  \"amount\": 20.5,\n  \"currency\": \"SGD\",\n  \"merchantRef\": \"trip-456\",\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\",\n    \"estimatedMinutes\": 30\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6408a696-a1c5-42cd-b5a9-2da8f583347e",
+              "name": "The payment token was not found, has been unlinked, or belongs to a different merchant.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique key to safely retry the request without duplicate holds. Use a UUID per logical pre-auth attempt.",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\",\n  \"merchantUserId\": \"merchant_rider_42\",\n  \"amount\": 20.5,\n  \"currency\": \"SGD\",\n  \"merchantRef\": \"trip-456\",\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\",\n    \"estimatedMinutes\": 30\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "50d3cdac-3f18-42d5-9893-662f69ad2c80",
+          "name": "Get cashback balance for a payment token",
+          "request": {
+            "name": "Get cashback balance for a payment token",
+            "description": {
+              "content": "Returns the user's available cashback balance for the merchant channel associated with the payment token.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "tokens",
+                "cashback-balance"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentToken\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6a8c7dcd-2388-4080-9ad3-0db97d57efa0",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "tokens",
+                    "cashback-balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"cashbackBalance\": 15,\n  \"currency\": \"SGD\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f623d20-f802-460c-b8f4-2e3752c9cfdd",
+              "name": "The paymentToken field is required.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "tokens",
+                    "cashback-balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e3c7db13-0486-4986-937b-6a9fbba8eef0",
+              "name": "Missing or invalid merchant JWT, or the payment token was not found, has been unlinked, or belongs to a different merchant.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "tokens",
+                    "cashback-balance"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "232ba2ff-a209-4bcd-8583-d02675c24d17",
+          "name": "Get a pre-authorization by ID",
+          "request": {
+            "name": "Get a pre-authorization by ID",
+            "description": {
+              "content": "Returns the current state of a pre-authorization. Use this to poll for status transitions after create, capture, or void operations.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "pre-auths",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0713a39a-f830-4fbf-81d6-b07492467469",
+              "name": "Pre-auth found and returned.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"merchantRef\": \"trip-456\",\n  \"status\": \"AUTHORIZED\",\n  \"amount\": 20.5,\n  \"currency\": \"SGD\",\n  \"orderUuid\": \"7b3f1234-ab12-4321-b123-000000000001\",\n  \"orderStatus\": \"COMPLETED\",\n  \"failureReason\": null,\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\"\n  },\n  \"createdAt\": \"2026-04-30T10:00:00.000Z\",\n  \"updatedAt\": \"2026-04-30T10:05:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3c7744e3-6ab9-4c52-8de8-5fcc6c4a0e71",
+              "name": "The provided ID is not in a valid format.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fab39c75-60e3-489f-b15d-362a915da66c",
+              "name": "Missing or invalid merchant JWT.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e6498482-7e37-4efd-8371-156e4053d495",
+              "name": "Pre-authorization not found or belongs to a different merchant.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e5360f9-f7f3-41b9-9091-48fd1ee6f611",
+          "name": "Immediate tokenized payment charge (auth + capture)",
+          "request": {
+            "name": "Immediate tokenized payment charge (auth + capture)",
+            "description": {
+              "content": "Charges the user's linked payment method in a single step without a pre-authorization hold. Use this for one-shot payments where you do not need to adjust the amount before capture.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "charge"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Unique key to safely retry the request without duplicate charges. Use a UUID per logical charge attempt.",
+                "key": "X-ShopBack-Idempotent-Id",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentToken\": \"<string>\",\n  \"merchantUserId\": \"<string>\",\n  \"amount\": \"<number>\",\n  \"currency\": \"<string>\",\n  \"merchantRef\": \"<string>\",\n  \"useCashback\": true,\n  \"callbackUrl\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a27cc000-d6f5-40a6-9eba-5d906a71eeec",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "charge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique key to safely retry the request without duplicate charges. Use a UUID per logical charge attempt.",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\",\n  \"merchantUserId\": \"merchant_rider_42\",\n  \"amount\": 17,\n  \"currency\": \"SGD\",\n  \"merchantRef\": \"trip-456-tip\",\n  \"useCashback\": true,\n  \"callbackUrl\": \"https://merchant.example.com/webhooks/shopback\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"uuid\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"orderUuid\": \"7b3f1234-ab12-4321-b123-000000000001\",\n  \"status\": \"APPROVED\",\n  \"orderType\": \"ONLINE\",\n  \"merchantRef\": \"trip-456-tip\",\n  \"merchantOrderId\": \"order-789\",\n  \"consumerEmail\": \"user@example.com\",\n  \"failureReason\": null,\n  \"createdAt\": \"2026-04-30T10:00:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1dd726d-c43e-47b2-af69-b24467c6d505",
+              "name": "One or more required fields are missing, the amount must be greater than zero, or the currency is invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "charge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique key to safely retry the request without duplicate charges. Use a UUID per logical charge attempt.",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\",\n  \"merchantUserId\": \"merchant_rider_42\",\n  \"amount\": 17,\n  \"currency\": \"SGD\",\n  \"merchantRef\": \"trip-456-tip\",\n  \"useCashback\": true,\n  \"callbackUrl\": \"https://merchant.example.com/webhooks/shopback\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a2f4d33-8078-4027-a17f-9b4edd52f42f",
+              "name": "The payment token was not found, has been unlinked, or belongs to a different merchant.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "charge"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique key to safely retry the request without duplicate charges. Use a UUID per logical charge attempt.",
+                    "key": "X-ShopBack-Idempotent-Id",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\",\n  \"merchantUserId\": \"merchant_rider_42\",\n  \"amount\": 17,\n  \"currency\": \"SGD\",\n  \"merchantRef\": \"trip-456-tip\",\n  \"useCashback\": true,\n  \"callbackUrl\": \"https://merchant.example.com/webhooks/shopback\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9870f9d4-fa0f-42b6-9c2b-bc3692e9bee4",
+          "name": "Void a pre-authorization",
+          "request": {
+            "name": "Void a pre-authorization",
+            "description": {
+              "content": "Releases the held funds for a pre-authorization. The pre-auth must be in AUTHORIZED status. If the provider rejects the void, the pre-auth stays AUTHORIZED and the merchant may retry.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "pre-auths",
+                ":id",
+                "void"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"<string>\",\n  \"merchantMetadata\": \"<object>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "03d460ac-607d-4bad-b769-b69c36fdad35",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id",
+                    "void"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"Rider cancelled before driver arrived\",\n  \"merchantMetadata\": {\n    \"replacesPaymentId\": \"ord-D\",\n    \"tripId\": \"trip-456\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"merchantRef\": \"trip-456\",\n  \"status\": \"AUTHORIZED\",\n  \"amount\": 20.5,\n  \"currency\": \"SGD\",\n  \"orderUuid\": \"7b3f1234-ab12-4321-b123-000000000001\",\n  \"orderStatus\": \"COMPLETED\",\n  \"failureReason\": null,\n  \"merchantMetadata\": {\n    \"tripId\": \"trip-456\"\n  },\n  \"createdAt\": \"2026-04-30T10:00:00.000Z\",\n  \"updatedAt\": \"2026-04-30T10:05:00.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e766d11-6121-4289-ae3c-c15296cea650",
+              "name": "Missing or invalid merchant JWT.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id",
+                    "void"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"Rider cancelled before driver arrived\",\n  \"merchantMetadata\": {\n    \"replacesPaymentId\": \"ord-D\",\n    \"tripId\": \"trip-456\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a38731eb-3435-421a-a3b5-253aee9e12e9",
+              "name": "Pre-authorization not found or belongs to a different merchant.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id",
+                    "void"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"Rider cancelled before driver arrived\",\n  \"merchantMetadata\": {\n    \"replacesPaymentId\": \"ord-D\",\n    \"tripId\": \"trip-456\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa265eed-f4cb-4641-8aae-57b34c28492f",
+              "name": "The pre-authorization is in a state that cannot be voided (already captured, voided, declined, or expired).",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "pre-auths",
+                    ":id",
+                    "void"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Pre-authorization UUID returned by POST /pre-auths."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"reason\": \"Rider cancelled before driver arrived\",\n  \"merchantMetadata\": {\n    \"replacesPaymentId\": \"ord-D\",\n    \"tripId\": \"trip-456\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://integrations-sandbox.shopback.com/demo/merchant",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "98f0a1d2-cf6b-4e08-8f05-975c758bab80",
+    "name": "Online Payments Pre Auth API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,1001 @@
+{
+  "item": [
+    {
+      "id": "eff2e28d-9ed2-4d21-99e9-60e50c2f7266",
+      "name": "Account Linking",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "79eb3fe3-5555-4953-8b3d-595226ca8fff",
+          "name": "Get link session status",
+          "request": {
+            "name": "Get link session status",
+            "description": {
+              "content": "Returns the current state of a tokenized payment link session. Poll this endpoint after redirecting the user to determine when the consent flow is complete.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "link-sessions",
+                "link",
+                ":linkToken"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "linkToken",
+                  "description": "(Required) The link session UUID returned by `POST /link-sessions/link`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cf541fd6-86f5-4775-b070-85d10b5c10eb",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "link",
+                    ":linkToken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linkToken",
+                      "description": "(Required) The link session UUID returned by `POST /link-sessions/link`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"linkToken\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"status\": \"PENDING\",\n  \"expiresAt\": \"2026-04-30T10:20:00.000Z\",\n  \"authCode\": \"a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4\",\n  \"authCodeExpiresAt\": \"2026-04-30T10:01:05.000Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7e184b6-1bcc-4560-8a3d-8a7480a256eb",
+              "name": "Missing or invalid merchant JWT.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "link",
+                    ":linkToken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linkToken",
+                      "description": "(Required) The link session UUID returned by `POST /link-sessions/link`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ca40657a-5f83-4b59-b7f5-53b56752c518",
+              "name": "Link session not found or belongs to a different merchant.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "link",
+                    ":linkToken"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "linkToken",
+                      "description": "(Required) The link session UUID returned by `POST /link-sessions/link`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b274eab6-1d23-4ae3-bca8-a9c6e7e5e07e",
+          "name": "Initiate a tokenized payment link session",
+          "request": {
+            "name": "Initiate a tokenized payment link session",
+            "description": {
+              "content": "Creates a PENDING link session and returns a `redirectUrl` and `appToken`. The merchant opens `redirectUrl` in an in-app browser and passes `appToken` as `X-ShopBack-App-Token`.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "link-sessions",
+                "link"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"callbackUrl\": \"<string>\",\n  \"state\": \"<string>\",\n  \"merchantUserId\": \"<string>\",\n  \"userHint\": {\n    \"phone\": \"<string>\",\n    \"email\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1601753c-29f8-46b4-8850-9f5c5cf81d0a",
+              "name": "Link session created; merchant should redirect user to `redirectUrl`.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "link"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callbackUrl\": \"https://merchant-name.sg/link/callback\",\n  \"state\": \"a8f3c2e1d7b4509f\",\n  \"merchantUserId\": \"merchant_user_42\",\n  \"userHint\": {\n    \"phone\": \"+6591xxxx67\",\n    \"email\": \"r***@example.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"linkToken\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"redirectUrl\": \"https://pay.shopback.com/link\",\n  \"expiresAt\": \"2026-04-30T10:20:00.000Z\",\n  \"appToken\": \"<HS256-signed-jwt>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2bb05a85-a5d6-4052-8080-17f444585d1d",
+              "name": "Invalid request body, malformed `callbackUrl`, `callbackUrl` not on the channel allowlist, or `userHint` missing or contains no sub-fields.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "link"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callbackUrl\": \"https://merchant-name.sg/link/callback\",\n  \"state\": \"a8f3c2e1d7b4509f\",\n  \"merchantUserId\": \"merchant_user_42\",\n  \"userHint\": {\n    \"phone\": \"+6591xxxx67\",\n    \"email\": \"r***@example.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "cf09ba3f-c828-4783-b0cd-e332996fa96e",
+              "name": "Missing or invalid merchant JWT.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "link"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"callbackUrl\": \"https://merchant-name.sg/link/callback\",\n  \"state\": \"a8f3c2e1d7b4509f\",\n  \"merchantUserId\": \"merchant_user_42\",\n  \"userHint\": {\n    \"phone\": \"+6591xxxx67\",\n    \"email\": \"r***@example.com\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a919dcf-6966-4fa7-b453-82da962015a2",
+          "name": "Exchange an auth code for a payment token",
+          "request": {
+            "name": "Exchange an auth code for a payment token",
+            "description": {
+              "content": "Validates the one-time auth code issued after the user completes the ShopBack consent flow and returns a reusable payment token scoped to the merchant channel.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "link-sessions",
+                "token"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ccbc6881-6b28-482a-b1b4-b6d19983eb2e",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46494726-0d2b-43dd-a0bb-99108b8a7d55",
+              "name": "The auth code is missing, the link session is not ready to exchange a code, the auth code has expired, or the auth code is incorrect.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57747ae6-003f-440e-96ce-41bfbc2292a3",
+              "name": "Missing or invalid merchant JWT.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7a0ed98-91c8-4583-b826-fa1aba70dc48",
+              "name": "Link session not found or belongs to a different merchant.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "link-sessions",
+                    "token"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"code\": \"a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 404,\n  \"errorMessages\": [\n    \"Pre-auth not found\"\n  ],\n  \"errorId\": \"trace-id-abc123\",\n  \"name\": \"NOT_FOUND\",\n  \"errorCode\": \"NOT_FOUND\",\n  \"code\": \"pre-auth.not-found\",\n  \"helpUrl\": \"https://support.hoolah.co/error?code=pre-auth.not-found\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "af4889f5-c2b8-4ec3-948f-ae86d428f27a",
+          "name": "Revoke a linked payment token",
+          "request": {
+            "name": "Revoke a linked payment token",
+            "description": {
+              "content": "Unlinks a payment token for the authenticated merchant channel. Returns 400 if an active pre-auth (AUTHORIZED) is still open for the account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tokenized-payment",
+                "v1",
+                "tokens",
+                "unlink"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"paymentToken\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "bfb6deb9-ad21-4bb4-9ae6-9865b290bfc9",
+              "name": "Payment token successfully unlinked.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "tokens",
+                    "unlink"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\",\n  \"status\": \"UNLINKED\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acd33f5f-691e-47b5-b697-c1f1a37a26bb",
+              "name": "paymentToken field is missing from the body, or an active pre-auth blocks the unlink.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "tokens",
+                    "unlink"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "727b7462-5a93-4b97-8224-e2a5d1810d00",
+              "name": "Missing or invalid merchant JWT.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "tokens",
+                    "unlink"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "71a0292f-0184-4aeb-9cd8-369c73712d95",
+              "name": "Payment token not found or already unlinked.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tokenized-payment",
+                    "v1",
+                    "tokens",
+                    "unlink"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"paymentToken\": \"aBcD1234eFgH5678iJkL9012mNoP3456\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://integrations-sandbox.shopback.com/demo/merchant",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0c9ee2d2-89a3-4f8c-a5c8-bf0f3b189951",
+    "name": "Online Payments Account Linking API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "",
+      "type": "text/plain"
+    }
+  }
+}
