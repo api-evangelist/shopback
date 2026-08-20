@@ -33,6 +33,17 @@ tags:
 - Loyalty
 - E-Commerce
 - Buy Now Pay Later
+- Point-of-Sale
+- Checkout
+- Singapore
+tags_raw:
+- Company
+- Payments
+- Cashback
+- Rewards
+- Loyalty
+- E-Commerce
+- Buy Now Pay Later
 - Point Of Sale
 - Checkout
 - Singapore
@@ -127,6 +138,8 @@ apis:
   humanURL: https://docs.shopback.com/reference/initiateorder
   baseURL: https://prod-merchant-service.hoolah.co/merchant
   tags:
+  - Order
+  tags_raw:
   - Orders
   properties:
   - type: OpenAPI
