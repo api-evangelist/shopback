@@ -12,7 +12,7 @@ paths:
     post:
       tags:
       - Authentication
-      description: There is a clean Login and Logout process associated with the Authentication process. Before you can  Login, you need to obtain credentials from ShopBack - provided after registering a set of valid merchant details.
+      description: There is a clean Login and Logout process associated with the Authentication process. Before you can Login, you need to obtain credentials from ShopBack - provided after registering a set of valid merchant details.
       parameters:
       - name: X-ShopBack-Idempotent-Id
         in: header
@@ -54,6 +54,18 @@ paths:
       x-source-doc: https://docs.shopback.com/reference/login
 components:
   schemas:
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Auth token provided by ShopBack to the merchant
+          example: local-RUZvpBJr56eC5X0ZVXog4TnZ3Rp8GsF9UWZyWv9o7iM
+        expiresAt:
+          type: string
+          description: Token expiry
+          format: date-time
+          example: '2019-01-05T20:18:32.651+05:30'
     LoginRequest:
       required:
       - password
@@ -68,18 +80,6 @@ components:
           type: string
           description: This will be the merchant secret proviced by ShopBack. TK_ for Sandbox, PK_ for Production
           example: TK_sandbox123
-    LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Auth token provided by ShopBack to the merchant
-          example: local-RUZvpBJr56eC5X0ZVXog4TnZ3Rp8GsF9UWZyWv9o7iM
-        expiresAt:
-          type: string
-          description: Token expiry
-          format: date-time
-          example: '2019-01-05T20:18:32.651+05:30'
   securitySchemes:
     bearer:
       type: http
