@@ -269,143 +269,6 @@ paths:
       x-source-doc: https://docs.shopback.com/reference/void-pre-auth
 components:
   schemas:
-    MgsExternalErrorResponseDto:
-      required:
-      - statusCode
-      - errorMessages
-      - errorId
-      - name
-      - errorCode
-      - code
-      - helpUrl
-      type: object
-      properties:
-        statusCode:
-          type: number
-          example: 404
-        errorMessages:
-          example:
-          - Pre-auth not found
-          type: array
-          items:
-            type: string
-        errorId:
-          type: string
-          example: trace-id-abc123
-        name:
-          type: string
-          example: NOT_FOUND
-        errorCode:
-          type: string
-          example: NOT_FOUND
-        code:
-          type: string
-          example: pre-auth.not-found
-        helpUrl:
-          type: string
-          example: https://support.hoolah.co/error?code=pre-auth.not-found
-    CapturePreAuthResponseDto:
-      required:
-      - uuid
-      - orderUuid
-      - status
-      - orderType
-      - merchantRef
-      - merchantOrderId
-      - consumerEmail
-      - createdAt
-      - failureReason
-      type: object
-      properties:
-        uuid:
-          type: string
-          description: Pre-authorization UUID.
-          example: 550e8400-e29b-41d4-a716-446655440000
-        orderUuid:
-          type: string
-          description: UUID of the settled order created by this capture.
-          example: 7b3f1234-ab12-4321-b123-000000000001
-        status:
-          type: string
-          description: Order status after capture.
-          example: APPROVED
-        orderType:
-          type: string
-          description: Order type.
-          example: ONLINE
-        merchantRef:
-          type: string
-          description: Merchant's reference ID supplied at pre-auth creation.
-          example: trip-456
-        merchantOrderId:
-          type: string
-          description: Merchant's order ID.
-          example: order-789
-        consumerEmail:
-          type: string
-          description: Consumer's email address.
-          example: user@example.com
-        createdAt:
-          type: string
-          description: ISO 8601 creation timestamp.
-          example: '2026-04-30T10:00:00.000Z'
-        failureReason:
-          type:
-          - string
-          - 'null'
-          description: null on a successful capture; error code when the payment is declined.
-          example: null
-    ImmediateChargeResponseDto:
-      required:
-      - uuid
-      - orderUuid
-      - status
-      - orderType
-      - merchantRef
-      - merchantOrderId
-      - consumerEmail
-      - failureReason
-      - createdAt
-      type: object
-      properties:
-        uuid:
-          type: string
-          description: Charge UUID.
-          example: 550e8400-e29b-41d4-a716-446655440000
-        orderUuid:
-          type: string
-          description: UUID of the settled order created by this charge.
-          example: 7b3f1234-ab12-4321-b123-000000000001
-        status:
-          type: string
-          description: Order status after charge.
-          example: APPROVED
-        orderType:
-          type: string
-          description: Order type.
-          example: ONLINE
-        merchantRef:
-          type: string
-          description: Merchant's reference ID supplied at charge creation.
-          example: trip-456-tip
-        merchantOrderId:
-          type: string
-          description: Merchant's order ID.
-          example: order-789
-        consumerEmail:
-          type: string
-          description: Consumer's email address.
-          example: user@example.com
-        failureReason:
-          type:
-          - string
-          - 'null'
-          description: Failure reason if the charge failed; null on success.
-          example: null
-        createdAt:
-          type: string
-          description: ISO 8601 creation timestamp.
-          example: '2026-04-30T10:00:00.000Z'
     PreAuthResponseDto:
       required:
       - id
@@ -482,6 +345,231 @@ components:
           type: string
           description: ISO 8601 last-updated timestamp.
           example: '2026-04-30T10:05:00.000Z'
+    CapturePreAuthRequestDto:
+      type: object
+      properties:
+        useCashback:
+          type: boolean
+          description: Whether to apply available cashback balance at capture. Defaults to true.
+          example: true
+        merchantMetadata:
+          type: object
+          description: Opaque JSON blob stored verbatim and returned on read endpoints. Max 5 keys; each string value must not exceed 200 characters.
+          example:
+            tripId: trip-456
+        callbackUrl:
+          type: string
+          description: HTTPS URL to receive order status webhook notifications. When provided, ShopBack will POST the order outcome to this URL upon capture.
+          example: https://merchant.example.com/webhooks/shopback
+    GetCashbackBalanceResponse:
+      required:
+      - cashbackBalance
+      - currency
+      type: object
+      properties:
+        cashbackBalance:
+          type: number
+          description: Available cashback balance in major units (e.g. 15.00 = $15.00).
+          example: 15
+        currency:
+          type: string
+          description: 3-letter ISO currency code for the balance.
+          example: SGD
+    ImmediateChargeResponseDto:
+      required:
+      - uuid
+      - orderUuid
+      - status
+      - orderType
+      - merchantRef
+      - merchantOrderId
+      - consumerEmail
+      - failureReason
+      - createdAt
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: Charge UUID.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        orderUuid:
+          type: string
+          description: UUID of the settled order created by this charge.
+          example: 7b3f1234-ab12-4321-b123-000000000001
+        status:
+          type: string
+          description: Order status after charge.
+          example: APPROVED
+        orderType:
+          type: string
+          description: Order type.
+          example: ONLINE
+        merchantRef:
+          type: string
+          description: Merchant's reference ID supplied at charge creation.
+          example: trip-456-tip
+        merchantOrderId:
+          type: string
+          description: Merchant's order ID.
+          example: order-789
+        consumerEmail:
+          type: string
+          description: Consumer's email address.
+          example: user@example.com
+        failureReason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason if the charge failed; null on success.
+          example: null
+        createdAt:
+          type: string
+          description: ISO 8601 creation timestamp.
+          example: '2026-04-30T10:00:00.000Z'
+    CreatePreAuthRequestDto:
+      required:
+      - paymentToken
+      - merchantUserId
+      - amount
+      - currency
+      - merchantRef
+      type: object
+      properties:
+        paymentToken:
+          type: string
+          description: Payment token from POST /token. Resolves the user and their default card.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+        merchantUserId:
+          type: string
+          description: Merchant's opaque identifier for the end user (e.g. user ID). Used to verify the payment token belongs to this user.
+          example: merchant_rider_42
+        amount:
+          type: number
+          description: Hold amount. Must be > 0. Also the capture amount.
+          example: 20.5
+        currency:
+          type: string
+          description: 3-letter ISO currency code. Must match the merchant channel country currency.
+          example: SGD
+        merchantRef:
+          type: string
+          description: Merchant's reference ID (e.g. trip ID). Used for idempotent duplicate detection.
+          example: trip-456
+        merchantMetadata:
+          type: object
+          description: Opaque JSON blob stored verbatim and returned on read endpoints. Max 5 keys; each string value must not exceed 200 characters.
+          example:
+            tripId: trip-456
+            estimatedMinutes: 30
+    GetCashbackBalanceRequest:
+      required:
+      - paymentToken
+      type: object
+      properties:
+        paymentToken:
+          type: string
+          description: Payment token issued by ShopBack to identify the linked ShopBack user.
+          example: aBcD1234eFgH5678iJkL9012mNoP3456
+    VoidPreAuthRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+          description: Optional free-text reason for voiding. Stored verbatim on the pre-auth lifecycle.
+          example: Rider cancelled before driver arrived
+          maxLength: 500
+        merchantMetadata:
+          type: object
+          description: Opaque JSON blob stored verbatim on the pre-auth row, replacing any value set at creation. Max 5 keys; each string value must not exceed 200 characters.
+          example:
+            replacesPaymentId: ord-D
+            tripId: trip-456
+    CapturePreAuthResponseDto:
+      required:
+      - uuid
+      - orderUuid
+      - status
+      - orderType
+      - merchantRef
+      - merchantOrderId
+      - consumerEmail
+      - createdAt
+      - failureReason
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: Pre-authorization UUID.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        orderUuid:
+          type: string
+          description: UUID of the settled order created by this capture.
+          example: 7b3f1234-ab12-4321-b123-000000000001
+        status:
+          type: string
+          description: Order status after capture.
+          example: APPROVED
+        orderType:
+          type: string
+          description: Order type.
+          example: ONLINE
+        merchantRef:
+          type: string
+          description: Merchant's reference ID supplied at pre-auth creation.
+          example: trip-456
+        merchantOrderId:
+          type: string
+          description: Merchant's order ID.
+          example: order-789
+        consumerEmail:
+          type: string
+          description: Consumer's email address.
+          example: user@example.com
+        createdAt:
+          type: string
+          description: ISO 8601 creation timestamp.
+          example: '2026-04-30T10:00:00.000Z'
+        failureReason:
+          type:
+          - string
+          - 'null'
+          description: null on a successful capture; error code when the payment is declined.
+          example: null
+    MgsExternalErrorResponseDto:
+      required:
+      - statusCode
+      - errorMessages
+      - errorId
+      - name
+      - errorCode
+      - code
+      - helpUrl
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        errorMessages:
+          example:
+          - Pre-auth not found
+          type: array
+          items:
+            type: string
+        errorId:
+          type: string
+          example: trace-id-abc123
+        name:
+          type: string
+          example: NOT_FOUND
+        errorCode:
+          type: string
+          example: NOT_FOUND
+        code:
+          type: string
+          example: pre-auth.not-found
+        helpUrl:
+          type: string
+          example: https://support.hoolah.co/error?code=pre-auth.not-found
     ImmediateChargeRequestDto:
       required:
       - paymentToken
@@ -520,94 +608,6 @@ components:
           type: string
           description: HTTPS URL to receive order status webhook notifications. When provided, ShopBack will POST the order outcome to this URL upon payment completion or failure. Must use HTTPS with a valid public domain.
           example: https://merchant.example.com/webhooks/shopback
-    VoidPreAuthRequest:
-      type: object
-      properties:
-        reason:
-          type: string
-          description: Optional free-text reason for voiding. Stored verbatim on the pre-auth lifecycle.
-          example: Rider cancelled before driver arrived
-          maxLength: 500
-        merchantMetadata:
-          type: object
-          description: Opaque JSON blob stored verbatim on the pre-auth row, replacing any value set at creation. Max 5 keys; each string value must not exceed 200 characters.
-          example:
-            replacesPaymentId: ord-D
-            tripId: trip-456
-    GetCashbackBalanceResponse:
-      required:
-      - cashbackBalance
-      - currency
-      type: object
-      properties:
-        cashbackBalance:
-          type: number
-          description: Available cashback balance in major units (e.g. 15.00 = $15.00).
-          example: 15
-        currency:
-          type: string
-          description: 3-letter ISO currency code for the balance.
-          example: SGD
-    CapturePreAuthRequestDto:
-      type: object
-      properties:
-        useCashback:
-          type: boolean
-          description: Whether to apply available cashback balance at capture. Defaults to true.
-          example: true
-        merchantMetadata:
-          type: object
-          description: Opaque JSON blob stored verbatim and returned on read endpoints. Max 5 keys; each string value must not exceed 200 characters.
-          example:
-            tripId: trip-456
-        callbackUrl:
-          type: string
-          description: HTTPS URL to receive order status webhook notifications. When provided, ShopBack will POST the order outcome to this URL upon capture.
-          example: https://merchant.example.com/webhooks/shopback
-    GetCashbackBalanceRequest:
-      required:
-      - paymentToken
-      type: object
-      properties:
-        paymentToken:
-          type: string
-          description: Payment token issued by ShopBack to identify the linked ShopBack user.
-          example: aBcD1234eFgH5678iJkL9012mNoP3456
-    CreatePreAuthRequestDto:
-      required:
-      - paymentToken
-      - merchantUserId
-      - amount
-      - currency
-      - merchantRef
-      type: object
-      properties:
-        paymentToken:
-          type: string
-          description: Payment token from POST /token. Resolves the user and their default card.
-          example: aBcD1234eFgH5678iJkL9012mNoP3456
-        merchantUserId:
-          type: string
-          description: Merchant's opaque identifier for the end user (e.g. user ID). Used to verify the payment token belongs to this user.
-          example: merchant_rider_42
-        amount:
-          type: number
-          description: Hold amount. Must be > 0. Also the capture amount.
-          example: 20.5
-        currency:
-          type: string
-          description: 3-letter ISO currency code. Must match the merchant channel country currency.
-          example: SGD
-        merchantRef:
-          type: string
-          description: Merchant's reference ID (e.g. trip ID). Used for idempotent duplicate detection.
-          example: trip-456
-        merchantMetadata:
-          type: object
-          description: Opaque JSON blob stored verbatim and returned on read endpoints. Max 5 keys; each string value must not exceed 200 characters.
-          example:
-            tripId: trip-456
-            estimatedMinutes: 30
   securitySchemes:
     bearer:
       type: http
