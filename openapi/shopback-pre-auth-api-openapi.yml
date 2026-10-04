@@ -269,98 +269,6 @@ paths:
       x-source-doc: https://docs.shopback.com/reference/void-pre-auth
 components:
   schemas:
-    PreAuthResponseDto:
-      required:
-      - id
-      - merchantRef
-      - status
-      - amount
-      - currency
-      - orderUuid
-      - orderStatus
-      - failureReason
-      - merchantMetadata
-      - createdAt
-      - updatedAt
-      type: object
-      properties:
-        id:
-          type: string
-          description: Pre-authorization UUID.
-          example: 550e8400-e29b-41d4-a716-446655440000
-        merchantRef:
-          type: string
-          description: Merchant's reference ID supplied at creation.
-          example: trip-456
-        status:
-          type: string
-          description: Lifecycle state of the pre-authorization.
-          enum:
-          - PENDING
-          - AUTHORIZED
-          - CAPTURE_INITIATED
-          - CAPTURED
-          - VOIDED
-          - DECLINED
-          - EXPIRED
-          example: AUTHORIZED
-        amount:
-          type: number
-          description: Hold amount in major currency units.
-          example: 20.5
-        currency:
-          type: string
-          description: 3-letter ISO currency code.
-          example: SGD
-        orderUuid:
-          type:
-          - string
-          - 'null'
-          description: UUID of the settled order. Non-null after capture.
-          example: 7b3f1234-ab12-4321-b123-000000000001
-        orderStatus:
-          type:
-          - string
-          - 'null'
-          description: Status of the settled order. Non-null after capture.
-          example: COMPLETED
-        failureReason:
-          type:
-          - string
-          - 'null'
-          description: Failure reason if the pre-auth was declined or expired.
-          example: null
-        merchantMetadata:
-          type:
-          - object
-          - 'null'
-          description: Merchant-supplied metadata stored verbatim at creation.
-          example:
-            tripId: trip-456
-        createdAt:
-          type: string
-          description: ISO 8601 creation timestamp.
-          example: '2026-04-30T10:00:00.000Z'
-        updatedAt:
-          type: string
-          description: ISO 8601 last-updated timestamp.
-          example: '2026-04-30T10:05:00.000Z'
-    CapturePreAuthRequestDto:
-      type: object
-      properties:
-        useCashback:
-          type: boolean
-          description: Whether to apply available cashback balance at capture. Defaults to true.
-          example: true
-        merchantMetadata:
-          type: object
-          description: Opaque JSON blob stored verbatim and returned on read endpoints. Max 5 keys; each string value must not exceed 200 characters.
-          example:
-            tripId: trip-456
-        callbackUrl:
-          type: string
-          description: HTTPS URL to receive order status webhook notifications. When provided, ShopBack will POST the order outcome to this URL upon capture.
-          example: https://merchant.example.com/webhooks/shopback
     GetCashbackBalanceResponse:
       required:
       - cashbackBalance
@@ -470,20 +378,6 @@ components:
           type: string
           description: Payment token issued by ShopBack to identify the linked ShopBack user.
           example: aBcD1234eFgH5678iJkL9012mNoP3456
-    VoidPreAuthRequest:
-      type: object
-      properties:
-        reason:
-          type: string
-          description: Optional free-text reason for voiding. Stored verbatim on the pre-auth lifecycle.
-          example: Rider cancelled before driver arrived
-          maxLength: 500
-        merchantMetadata:
-          type: object
-          description: Opaque JSON blob stored verbatim on the pre-auth row, replacing any value set at creation. Max 5 keys; each string value must not exceed 200 characters.
-          example:
-            replacesPaymentId: ord-D
-            tripId: trip-456
     CapturePreAuthResponseDto:
       required:
       - uuid
@@ -535,41 +429,96 @@ components:
           - 'null'
           description: null on a successful capture; error code when the payment is declined.
           example: null
-    MgsExternalErrorResponseDto:
-      required:
-      - statusCode
-      - errorMessages
-      - errorId
-      - name
-      - errorCode
-      - code
-      - helpUrl
+    VoidPreAuthRequest:
       type: object
       properties:
-        statusCode:
-          type: number
-          example: 404
-        errorMessages:
+        reason:
+          type: string
+          description: Optional free-text reason for voiding. Stored verbatim on the pre-auth lifecycle.
+          example: Rider cancelled before driver arrived
+          maxLength: 500
+        merchantMetadata:
+          type: object
+          description: Opaque JSON blob stored verbatim on the pre-auth row, replacing any value set at creation. Max 5 keys; each string value must not exceed 200 characters.
           example:
-          - Pre-auth not found
-          type: array
-          items:
-            type: string
-        errorId:
+            replacesPaymentId: ord-D
+            tripId: trip-456
+    PreAuthResponseDto:
+      required:
+      - id
+      - merchantRef
+      - status
+      - amount
+      - currency
+      - orderUuid
+      - orderStatus
+      - failureReason
+      - merchantMetadata
+      - createdAt
+      - updatedAt
+      type: object
+      properties:
+        id:
           type: string
-          example: trace-id-abc123
-        name:
+          description: Pre-authorization UUID.
+          example: 550e8400-e29b-41d4-a716-446655440000
+        merchantRef:
           type: string
-          example: NOT_FOUND
-        errorCode:
+          description: Merchant's reference ID supplied at creation.
+          example: trip-456
+        status:
           type: string
-          example: NOT_FOUND
-        code:
+          description: Lifecycle state of the pre-authorization.
+          enum:
+          - PENDING
+          - AUTHORIZED
+          - CAPTURE_INITIATED
+          - CAPTURED
+          - VOIDED
+          - DECLINED
+          - EXPIRED
+          example: AUTHORIZED
+        amount:
+          type: number
+          description: Hold amount in major currency units.
+          example: 20.5
+        currency:
           type: string
-          example: pre-auth.not-found
-        helpUrl:
+          description: 3-letter ISO currency code.
+          example: SGD
+        orderUuid:
+          type:
+          - string
+          - 'null'
+          description: UUID of the settled order. Non-null after capture.
+          example: 7b3f1234-ab12-4321-b123-000000000001
+        orderStatus:
+          type:
+          - string
+          - 'null'
+          description: Status of the settled order. Non-null after capture.
+          example: COMPLETED
+        failureReason:
+          type:
+          - string
+          - 'null'
+          description: Failure reason if the pre-auth was declined or expired.
+          example: null
+        merchantMetadata:
+          type:
+          - object
+          - 'null'
+          description: Merchant-supplied metadata stored verbatim at creation.
+          example:
+            tripId: trip-456
+        createdAt:
           type: string
-          example: https://support.hoolah.co/error?code=pre-auth.not-found
+          description: ISO 8601 creation timestamp.
+          example: '2026-04-30T10:00:00.000Z'
+        updatedAt:
+          type: string
+          description: ISO 8601 last-updated timestamp.
+          example: '2026-04-30T10:05:00.000Z'
     ImmediateChargeRequestDto:
       required:
       - paymentToken
@@ -608,6 +557,57 @@ components:
           type: string
           description: HTTPS URL to receive order status webhook notifications. When provided, ShopBack will POST the order outcome to this URL upon payment completion or failure. Must use HTTPS with a valid public domain.
           example: https://merchant.example.com/webhooks/shopback
+    CapturePreAuthRequestDto:
+      type: object
+      properties:
+        useCashback:
+          type: boolean
+          description: Whether to apply available cashback balance at capture. Defaults to true.
+          example: true
+        merchantMetadata:
+          type: object
+          description: Opaque JSON blob stored verbatim and returned on read endpoints. Max 5 keys; each string value must not exceed 200 characters.
+          example:
+            tripId: trip-456
+        callbackUrl:
+          type: string
+          description: HTTPS URL to receive order status webhook notifications. When provided, ShopBack will POST the order outcome to this URL upon capture.
+          example: https://merchant.example.com/webhooks/shopback
+    MgsExternalErrorResponseDto:
+      required:
+      - statusCode
+      - errorMessages
+      - errorId
+      - name
+      - errorCode
+      - code
+      - helpUrl
+      type: object
+      properties:
+        statusCode:
+          type: number
+          example: 404
+        errorMessages:
+          example:
+          - Pre-auth not found
+          type: array
+          items:
+            type: string
+        errorId:
+          type: string
+          example: trace-id-abc123
+        name:
+          type: string
+          example: NOT_FOUND
+        errorCode:
+          type: string
+          example: NOT_FOUND
+        code:
+          type: string
+          example: pre-auth.not-found
+        helpUrl:
+          type: string
+          example: https://support.hoolah.co/error?code=pre-auth.not-found
   securitySchemes:
     bearer:
       type: http
