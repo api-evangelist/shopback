@@ -1,0 +1,16 @@
+generated: '2026-10-12'
+method: none
+source:
+- https://zapier.com/apps/shopback/integrations
+- https://n8n.io/integrations/shopback/
+- https://composio.dev/toolkits/shopback
+- https://monid.ai/tools/shopback
+checked:
+- https://composio.dev/toolkits/shopback
+- https://monid.ai/tools/shopback
+- https://n8n.io/integrations/shopback/
+- https://zapier.com/apps/shopback/integrations
+summary: null
+marketplace_apps: []
+edges: []
+templates: []
