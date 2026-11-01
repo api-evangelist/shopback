@@ -64,31 +64,130 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-ShopBack is a Singapore-headquartered shopping, rewards and payments platform founded in 2014, operating across 13 markets in Asia-Pacific, Europe and the United States. Alongside its consumer cashback app it runs a merchant payments business — ShopBack Pay and ShopBack PayLater — with a public developer hub at [docs.shopback.com](https://docs.shopback.com/).
+ShopBack is a Singapore-headquartered shopping, rewards and payments platform founded in 2014, operating across 13 markets in Asia-Pacific, Europe and the United States with more than 20 million members and 20,000 merchant partners. Alongside its consumer cashback and discovery app, ShopBack runs a merchant-facing payments business — ShopBack Pay and ShopBack PayLater — and publishes a public developer hub at docs.shopback.com covering two REST APIs. The Online Payments API (v2.0, also called the Online Bespoke API) handles merchant login, order initiation, order status, refunds, and a tokenized-payments surface for account linking, pre-authorization hold/capture/void, immediate charge and cashback-balance lookup. The In-Store Payments API (v1.4) covers merchant-presented and customer-presented QR ordering, order status, refunds, cancellations, and a payment-notification webhook for point-of-sale and customer-facing app checkout. Both are HMAC- or JWT-authenticated over HTTPS/TLS 1.2+, support an X-ShopBack-Idempotent-Id idempotency header, and ship e-commerce plugins for Shopify, WooCommerce, Magento, PrestaShop, EasyStore and Salesforce Commerce Cloud.
 
-- Website: https://www.shopback.com/
-- Developer hub: https://docs.shopback.com/
-- Status: https://status.shopback.com/
-- GitHub: https://github.com/shopback
+**Areas:** Company · Payments · Cashback · Rewards · Loyalty · E-Commerce · Buy Now Pay Later · Point-of-Sale · Checkout · Singapore
 
-## APIs
+## ShopBack on APIs.io
 
-| API | Version | Production base URL |
-|---|---|---|
-| [Online Payments API](https://docs.shopback.com/reference/initiateorder) (Online Bespoke) | 2.0 | `https://prod-merchant-service.hoolah.co/merchant` |
-| [In-Store Payments API](https://docs.shopback.com/reference/in-store-getting-started) | 1.4 | `https://integrations.shopback.sg/posi` (SG), `https://integrations.shopback.com.hk/posi` (HK) |
+Everything profiled for ShopBack is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/shopback/](https://apis.io/providers/shopback/)** — or go straight to one of the APIs or properties below.
 
-Both OpenAPI 3.0.1 documents in `openapi/` were assembled verbatim from the
-per-operation OpenAPI definitions ShopBack publishes on each API reference page
-of its developer hub. Twenty operations total.
+### APIs (5)
 
-## Artifacts
+- [ShopBack Account Linking API](https://apis.io/apis/shopback/shopback-account-linking-api/) — The Account Linking API from ShopBack — 4 operation(s) for account linking.
+- [ShopBack Authentication API](https://apis.io/apis/shopback/shopback-authentication-api/) — The Authentication API from ShopBack — 1 operation(s) for authentication.
+- [ShopBack Notification API](https://apis.io/apis/shopback/shopback-notification-api/) — The Notification API from ShopBack — 1 operation(s) for notification.
+- [ShopBack Orders API](https://apis.io/apis/shopback/shopback-orders-api/) — The Orders API from ShopBack — 8 operation(s) for orders.
+- [ShopBack Pre Auth API](https://apis.io/apis/shopback/shopback-pre-auth-api/) — The Pre-Auth API from ShopBack — 6 operation(s) for pre-auth.
 
-`openapi/` `overlays/` `authentication/` `conventions/` `errors/` `lifecycle/`
-`changelog/` `sandbox/` `conformance/` `data-model/` `components/` `packages/`
-`asyncapi/` `skills/` `mcp/` `llms/` `well-known/` `security/`
+### Published properties
 
-Notable absences, recorded rather than fabricated: no `/.well-known/` documents
-on any host, no A2A agent card, no OAuth 2.0 scopes, no published MCP server, no
-first-party SDK in any package registry, no AsyncAPI, and no published
-vulnerability-disclosure or trust-center page.
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Shopback Payment Notification Webhooks](https://apis.io/asyncapis/shopback/shopback-payment-notification-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [shopback-mcp.yml](https://apis.io/servers/shopback/shopback-mcp-yml/)
+
+#### Collections (5)
+
+Postman and Open Collection request collections.
+
+- [Online Payments Account Linking API](https://apis.io/collections/shopback/open-shopback-account-linking-api/)
+- [Online Payments Authentication API](https://apis.io/collections/shopback/open-shopback-authentication-api/)
+- [In-Store Payments Notification API](https://apis.io/collections/shopback/open-shopback-notification-api/)
+- [Shopback Orders API](https://apis.io/collections/shopback/open-shopback-orders-api/)
+- [Online Payments Pre Auth API](https://apis.io/collections/shopback/open-shopback-pre-auth-api/)
+
+#### Overlays (2)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Shopback In Store Payments Overlay](https://apis.io/overlays/shopback/shopback-in-store-payments-overlay/)
+- [Shopback Online Payments Overlay](https://apis.io/overlays/shopback/shopback-online-payments-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Shopback Authentication](https://apis.io/security/shopback/shopback-authentication/)
+- [Shopback Domain Security](https://apis.io/security/shopback/shopback-domain-security/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.shopback.com/)
+- [Documentation](https://docs.shopback.com/docs/getting-started)
+- [Getting started](https://docs.shopback.com/docs/quickstart-api)
+- [API reference](https://docs.shopback.com/reference/initiateorder)
+- [Pricing](https://business.shopback.com/sg/payments)
+- [Sign up](https://business.shopback.sg/signin)
+- [Support](https://shopback.my.site.com/merchanthelpcenter/s/)
+- [Blog](https://www.shopback.com/blog)
+- [Terms of service](https://support.shopback.com/hc/en-us/articles/33321351340307-Terms-of-use)
+- [Privacy policy](https://support.shopback.com/hc/en-us/articles/33321399347475-ShopBack-Privacy-Policy)
+- [GitHub](https://github.com/shopback)
+- [Status](https://status.shopback.com/)
+
+## API Evangelist rating
+
+**Kin Score 44.0** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 53.8 |
+| Contract governance | 4.5 |
+| Operational transparency | 42.1 |
+| Developer ergonomics | 49.4 |
+| Access clarity | 31.6 |
+
+**Agent readiness 36.4** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | — |
+| Reversibility Documented | documented (partial credit) |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | verified |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | — |
+
+**Regulatory alignment 31.3** — Payments
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/shopback/](https://apis.io/providers/shopback/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for ShopBack: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/shopback/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
